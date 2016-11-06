@@ -10,60 +10,16 @@ Check if a [node][] is a (certain) [**HAST**][hast] [element][].
 npm install hast-util-is-element
 ```
 
-**hast-util-is-element** is also available as an AMD, CommonJS, and
-globals module, [uncompressed and compressed][releases].
-
 ## Usage
 
-Dependencies:
-
 ```javascript
-var isElement = require('hast-util-is-element');
-```
+var is = require('hast-util-is-element');
 
-Given a non-element:
+isElement({type: 'text', value: 'foo'}); //=> false
 
-```javascript
-var result = isElement({
-    'type': 'text',
-    'value': 'foo'
-});
-```
+is({type: 'element', tagName: 'a'}, 'a'); //=> true
 
-Yields:
-
-```js
-false
-```
-
-Given a matching element:
-
-```javascript
-result = isElement({
-    'type': 'element',
-    'tagName': 'a'
-}, 'a');
-```
-
-Yields:
-
-```js
-true
-```
-
-Given multiple tagNames:
-
-```javascript
-result = isElement({
-    'type': 'element',
-    'tagName': 'a'
-}, ['a', 'area']);
-```
-
-Yields:
-
-```js
-true
+is({type: 'element', tagName: 'a'}, ['a', 'area']); //=> true
 ```
 
 ## API
@@ -76,15 +32,19 @@ When not given a second parameter, asserts if `node` is an element,
 otherwise asserts `node` is an element whose `tagName` matches / is
 included in the second parameter.
 
-**Parameters**:
+###### Parameters
 
 *   `node` (`*`) — Value to check;
 *   `tagName` (`string`, optional) — Value `node`s `tagName` must match;
 *   `tagNames` (`string`, optional) — Value including `node`s `tagName`.
 
-**Returns**: `boolean`, whether `node` passes the test.
+######Returns
 
-**Throws**: when the second parameter is given but invalid.
+`boolean` — whether `node` passes the test.
+
+###### Throws
+
+`Error` — When the second parameter is given but invalid.
 
 ## License
 
@@ -101,8 +61,6 @@ included in the second parameter.
 [coverage-page]: https://codecov.io/github/wooorm/hast-util-is-element?branch=master
 
 [npm]: https://docs.npmjs.com/cli/install
-
-[releases]: https://github.com/wooorm/hast-util-is-element/releases
 
 [license]: LICENSE
 
