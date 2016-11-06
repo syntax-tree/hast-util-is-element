@@ -15,7 +15,7 @@ npm install hast-util-is-element
 ```javascript
 var is = require('hast-util-is-element');
 
-isElement({type: 'text', value: 'foo'}); //=> false
+is({type: 'text', value: 'foo'}); //=> false
 
 is({type: 'element', tagName: 'a'}, 'a'); //=> true
 
@@ -36,9 +36,9 @@ included in the second parameter.
 
 *   `node` (`*`) — Value to check;
 *   `tagName` (`string`, optional) — Value `node`s `tagName` must match;
-*   `tagNames` (`string`, optional) — Value including `node`s `tagName`.
+*   `tagNames` (`Array.<string>`, optional) — Value including `node`s `tagName`.
 
-######Returns
+###### Returns
 
 `boolean` — whether `node` passes the test.
 
