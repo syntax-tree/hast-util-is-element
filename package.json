@@ -11,19 +11,16 @@
     "util",
     "utility"
   ],
-  "dependencies": {},
-  "files": [
-    "index.js"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wooorm/hast-util-is-element.git"
-  },
+  "repository": "https://github.com/wooorm/hast-util-is-element",
   "bugs": "https://github.com/wooorm/hast-util-is-element/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)"
   ],
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {},
   "devDependencies": {
     "browserify": "^13.0.0",
     "esmangle": "^1.0.1",
