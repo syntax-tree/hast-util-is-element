@@ -52,13 +52,13 @@ included in the second parameter.
 
 <!-- Definition -->
 
-[build-badge]: https://img.shields.io/travis/wooorm/hast-util-is-element.svg
+[build-badge]: https://img.shields.io/travis/syntax-tree/hast-util-is-element.svg
 
-[build-page]: https://travis-ci.org/wooorm/hast-util-is-element
+[build-page]: https://travis-ci.org/syntax-tree/hast-util-is-element
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/hast-util-is-element.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/hast-util-is-element.svg
 
-[coverage-page]: https://codecov.io/github/wooorm/hast-util-is-element?branch=master
+[coverage-page]: https://codecov.io/github/syntax-tree/hast-util-is-element?branch=master
 
 [npm]: https://docs.npmjs.com/cli/install
 
@@ -66,8 +66,8 @@ included in the second parameter.
 
 [author]: http://wooorm.com
 
-[hast]: https://github.com/wooorm/hast
+[hast]: https://github.com/syntax-tree/hast
 
-[node]: https://github.com/wooorm/hast#node
+[node]: https://github.com/syntax-tree/unist#node
 
-[element]: https://github.com/wooorm/hast#element
+[element]: https://github.com/syntax-tree/hast#element
