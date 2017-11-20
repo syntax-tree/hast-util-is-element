@@ -46,6 +46,14 @@ included in the second parameter.
 
 `Error` — When the second parameter is given but invalid.
 
+## Contribute
+
+See [`contribute.md` in `syntax-tree/hast`][contribute] for ways to get
+started.
+
+This organisation has a [Code of Conduct][coc].  By interacting with this
+repository, organisation, or community you agree to abide by its terms.
+
 ## License
 
 [MIT][license] © [Titus Wormer][author]
@@ -71,3 +79,7 @@ included in the second parameter.
 [node]: https://github.com/syntax-tree/unist#node
 
 [element]: https://github.com/syntax-tree/hast#element
+
+[contribute]: https://github.com/syntax-tree/hast/blob/master/contributing.md
+
+[coc]: https://github.com/syntax-tree/hast/blob/master/code-of-conduct.md
