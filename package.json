@@ -11,7 +11,7 @@
     "util",
     "utility"
   ],
-  "repository": "https://github.com/syntax-tree/hast-util-is-element",
+  "repository": "syntax-tree/hast-util-is-element",
   "bugs": "https://github.com/syntax-tree/hast-util-is-element/issues",
   "author": "Titus Wormer <tituswormer@gmail.com> (http://wooorm.com)",
   "contributors": [
