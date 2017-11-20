@@ -1,6 +1,5 @@
 'use strict';
 
-/* Expose. */
 module.exports = isElement;
 
 /* Check if, whether `tagNames` is given, a node is an element

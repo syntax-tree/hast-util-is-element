@@ -1,10 +1,8 @@
 'use strict';
 
-/* Dependencies. */
 var test = require('tape');
 var isElement = require('./index.js');
 
-/* Tests. */
 test('isElement', function (t) {
   t.equal(isElement(), false, 'should return `false` without node');
   t.equal(isElement(null), false, 'should return `false` with `null`');
