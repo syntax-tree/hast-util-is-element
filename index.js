@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-module.exports = isElement;
+module.exports = isElement
 
 /* Check if, whether `tagNames` is given, a node is an element
  * or an element matching `tagNames`. */
 function isElement(node, tagNames) {
-  var name;
+  var name
 
   if (
     !(
@@ -16,9 +16,10 @@ function isElement(node, tagNames) {
     )
   ) {
     throw new Error(
-      'Expected `string` or `Array.<string>` for ' +
-      '`tagNames`, not `' + tagNames + '`'
-    );
+      'Expected `string` or `Array.<string>` for `tagNames`, not `' +
+        tagNames +
+        '`'
+    )
   }
 
   if (
@@ -27,18 +28,18 @@ function isElement(node, tagNames) {
     node.type !== 'element' ||
     typeof node.tagName !== 'string'
   ) {
-    return false;
+    return false
   }
 
   if (tagNames === null || tagNames === undefined) {
-    return true;
+    return true
   }
 
-  name = node.tagName;
+  name = node.tagName
 
   if (typeof tagNames === 'string') {
-    return name === tagNames;
+    return name === tagNames
   }
 
-  return tagNames.indexOf(name) !== -1;
+  return tagNames.indexOf(name) !== -1
 }

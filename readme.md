@@ -13,13 +13,13 @@ npm install hast-util-is-element
 ## Usage
 
 ```javascript
-var is = require('hast-util-is-element');
+var is = require('hast-util-is-element')
 
-is({type: 'text', value: 'foo'}); //=> false
+is({type: 'text', value: 'foo'}) // => false
 
-is({type: 'element', tagName: 'a'}, 'a'); //=> true
+is({type: 'element', tagName: 'a'}, 'a') // => true
 
-is({type: 'element', tagName: 'a'}, ['a', 'area']); //=> true
+is({type: 'element', tagName: 'a'}, ['a', 'area']) // => true
 ```
 
 ## API
