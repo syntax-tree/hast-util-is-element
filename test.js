@@ -1,7 +1,7 @@
 'use strict';
 
 var test = require('tape');
-var isElement = require('./index.js');
+var isElement = require('.');
 
 test('isElement', function (t) {
   t.equal(isElement(), false, 'should return `false` without node');
