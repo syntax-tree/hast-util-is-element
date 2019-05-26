@@ -2,8 +2,8 @@
 
 module.exports = isElement
 
-/* Check if, whether `tagNames` is given, a node is an element
- * or an element matching `tagNames`. */
+// Check if if `node` is an `element` and, if `tagNames` is given, `node`
+// matches them `tagNames`.
 function isElement(node, tagNames) {
   var name
 
