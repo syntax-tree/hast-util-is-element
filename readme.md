@@ -1,18 +1,27 @@
-# hast-util-is-element [![Build][build-badge]][build] [![Coverage][coverage-badge]][coverage] [![Downloads][downloads-badge]][downloads] [![Chat][chat-badge]][chat]
+# hast-util-is-element
 
-Check if a [node][] is a (certain) [**HAST**][hast] [element][].
+[![Build][build-badge]][build]
+[![Coverage][coverage-badge]][coverage]
+[![Downloads][downloads-badge]][downloads]
+[![Size][size-badge]][size]
+[![Sponsors][sponsors-badge]][collective]
+[![Backers][backers-badge]][collective]
+[![Chat][chat-badge]][chat]
 
-## Installation
+[**hast**][hast] utility to check if a [*node*][node] is a (certain)
+[*element*][element].
+
+## Install
 
 [npm][]:
 
-```bash
+```sh
 npm install hast-util-is-element
 ```
 
 ## Usage
 
-```javascript
+```js
 var is = require('hast-util-is-element')
 
 is({type: 'text', value: 'foo'}) // => false
@@ -26,17 +35,20 @@ is({type: 'element', tagName: 'a'}, ['a', 'area']) // => true
 
 ### `isElement(node[, tagName|tagNames])`
 
-Check if a [node][] is a (certain) [**HAST**][hast] [element][].
+Check if the given value is a (certain) [*element*][element].
 
-When not given a second parameter, asserts if `node` is an element,
-otherwise asserts `node` is an element whose `tagName` matches / is
-included in the second parameter.
+*   When given a `tagName` or `tagNames`, checks that `node` is an
+    [*element*][element] whose `tagName` field matches `tagName` or is included
+    in `tagNames`
+*   Otherwise checks that `node` is an [*element*][element]
 
 ###### Parameters
 
-*   `node` (`*`) — Value to check;
-*   `tagName` (`string`, optional) — Value `node`s `tagName` must match;
-*   `tagNames` (`Array.<string>`, optional) — Value including `node`s `tagName`.
+*   `node` (`*`) — Value to check, probably [`Node`][node]
+*   `tagName` (`string`, optional) — Value that `node`s `tagName` field should
+    match
+*   `tagNames` (`Array.<string>`, optional) — Values that should include `node`s
+    `tagName` field should match
 
 ###### Returns
 
@@ -48,11 +60,13 @@ included in the second parameter.
 
 ## Contribute
 
-See [`contributing.md` in `syntax-tree/hast`][contributing] for ways to get
+See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
 started.
+See [`support.md`][support] for ways to get help.
 
-This organisation has a [Code of Conduct][coc].  By interacting with this
-repository, organisation, or community you agree to abide by its terms.
+This project has a [Code of Conduct][coc].
+By interacting with this repository, organisation, or community you agree to
+abide by its terms.
 
 ## License
 
@@ -72,9 +86,19 @@ repository, organisation, or community you agree to abide by its terms.
 
 [downloads]: https://www.npmjs.com/package/hast-util-is-element
 
+[size-badge]: https://img.shields.io/bundlephobia/minzip/hast-util-is-element.svg
+
+[size]: https://bundlephobia.com/result?p=hast-util-is-element
+
+[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
+
+[backers-badge]: https://opencollective.com/unified/backers/badge.svg
+
+[collective]: https://opencollective.com/unified
+
 [chat-badge]: https://img.shields.io/badge/join%20the%20community-on%20spectrum-7b16ff.svg
 
-[chat]: https://spectrum.chat/unified/rehype
+[chat]: https://spectrum.chat/unified/syntax-tree
 
 [npm]: https://docs.npmjs.com/cli/install
 
@@ -82,12 +106,14 @@ repository, organisation, or community you agree to abide by its terms.
 
 [author]: https://wooorm.com
 
+[contributing]: https://github.com/syntax-tree/.github/blob/master/contributing.md
+
+[support]: https://github.com/syntax-tree/.github/blob/master/support.md
+
+[coc]: https://github.com/syntax-tree/.github/blob/master/code-of-conduct.md
+
 [hast]: https://github.com/syntax-tree/hast
 
 [node]: https://github.com/syntax-tree/unist#node
 
 [element]: https://github.com/syntax-tree/hast#element
-
-[contributing]: https://github.com/syntax-tree/hast/blob/master/contributing.md
-
-[coc]: https://github.com/syntax-tree/hast/blob/master/code-of-conduct.md
