@@ -58,6 +58,11 @@ Check if the given value is a (certain) [*element*][element].
 
 `Error` — When the second parameter is given but invalid.
 
+## Security
+
+`hast-util-is-element` does not change the syntax tree so there are no openings
+for [cross-site scripting (XSS)][xss] attacks.
+
 ## Contribute
 
 See [`contributing.md` in `syntax-tree/.github`][contributing] for ways to get
@@ -117,3 +122,5 @@ abide by its terms.
 [node]: https://github.com/syntax-tree/unist#node
 
 [element]: https://github.com/syntax-tree/hast#element
+
+[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
