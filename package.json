@@ -1,15 +1,17 @@
 {
   "name": "hast-util-is-element",
   "version": "1.0.3",
-  "description": "Check if a node is a (certain) element",
+  "description": "hast utility to check if a node is a (certain) element",
   "license": "MIT",
   "keywords": [
+    "unist",
     "hast",
+    "hast-util",
+    "util",
+    "utility",
     "html",
     "is",
-    "element",
-    "util",
-    "utility"
+    "element"
   ],
   "repository": "syntax-tree/hast-util-is-element",
   "bugs": "https://github.com/syntax-tree/hast-util-is-element/issues",
