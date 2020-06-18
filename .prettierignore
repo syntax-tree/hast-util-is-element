@@ -1,3 +1,5 @@
 coverage/
 hast-util-is-element.js
 hast-util-is-element.min.js
+*.json
+*.md

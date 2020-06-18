@@ -3,19 +3,19 @@
 var test = require('tape')
 var isElement = require('.')
 
-test('isElement', function(t) {
+test('isElement', function (t) {
   t.equal(isElement(), false, 'should return `false` without node')
   t.equal(isElement(null), false, 'should return `false` with `null`')
 
   t.throws(
-    function() {
+    function () {
       isElement(null, true)
     },
     'Expected `string` or `Array.<string>` for `tagNames`, not `true`',
     'should throw when the second parameter is invalid'
   )
 
-  t.test('isElement(node)', function(st) {
+  t.test('isElement(node)', function (st) {
     st.equal(
       isElement({type: 'text'}),
       false,
@@ -37,7 +37,7 @@ test('isElement', function(t) {
     st.end()
   })
 
-  t.test('isElement(node, tagName)', function(st) {
+  t.test('isElement(node, tagName)', function (st) {
     st.equal(
       isElement({type: 'text'}, 'div'),
       false,
@@ -65,7 +65,7 @@ test('isElement', function(t) {
     st.end()
   })
 
-  t.test('isElement(node, tagNames)', function(st) {
+  t.test('isElement(node, tagNames)', function (st) {
     st.equal(
       isElement({type: 'text'}, ['div']),
       false,
