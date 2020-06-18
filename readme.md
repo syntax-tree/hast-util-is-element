@@ -67,13 +67,13 @@ for [cross-site scripting (XSS)][xss] attacks.
 
 *   [`hast-util-has-property`](https://github.com/syntax-tree/hast-util-has-property)
     — check if a node has a property
-*   [`hast-util-is-body-ok-link`](https://github.com/rehypejs/rehype-minify/tree/master/packages/hast-util-is-body-ok-link)
+*   [`hast-util-is-body-ok-link`](https://github.com/rehypejs/rehype-minify/tree/HEAD/packages/hast-util-is-body-ok-link)
     — check if a node is “Body OK” link element
-*   [`hast-util-is-conditional-comment`](https://github.com/rehypejs/rehype-minify/tree/master/packages/hast-util-is-conditional-comment)
+*   [`hast-util-is-conditional-comment`](https://github.com/rehypejs/rehype-minify/tree/HEAD/packages/hast-util-is-conditional-comment)
     — check if a node is a conditional comment
-*   [`hast-util-is-css-link`](https://github.com/rehypejs/rehype-minify/tree/master/packages/hast-util-is-css-link)
+*   [`hast-util-is-css-link`](https://github.com/rehypejs/rehype-minify/tree/HEAD/packages/hast-util-is-css-link)
     — check if a node is a CSS link element
-*   [`hast-util-is-css-style`](https://github.com/rehypejs/rehype-minify/tree/master/packages/hast-util-is-css-style)
+*   [`hast-util-is-css-style`](https://github.com/rehypejs/rehype-minify/tree/HEAD/packages/hast-util-is-css-style)
     — check if a node is a CSS style element
 *   [`hast-util-embedded`](https://github.com/syntax-tree/hast-util-embedded)
     — check if a node is an embedded element
@@ -81,7 +81,7 @@ for [cross-site scripting (XSS)][xss] attacks.
     — check if a node is a heading element
 *   [`hast-util-interactive`](https://github.com/syntax-tree/hast-util-interactive)
     — check if a node is interactive
-*   [`hast-util-is-javascript`](https://github.com/rehypejs/rehype-minify/tree/master/packages/hast-util-is-javascript)
+*   [`hast-util-is-javascript`](https://github.com/rehypejs/rehype-minify/tree/HEAD/packages/hast-util-is-javascript)
     — check if a node is a JavaScript script element
 *   [`hast-util-labelable`](https://github.com/syntax-tree/hast-util-labelable)
     — check whether a node is labelable
@@ -144,11 +144,11 @@ abide by its terms.
 
 [author]: https://wooorm.com
 
-[contributing]: https://github.com/syntax-tree/.github/blob/master/contributing.md
+[contributing]: https://github.com/syntax-tree/.github/blob/HEAD/contributing.md
 
-[support]: https://github.com/syntax-tree/.github/blob/master/support.md
+[support]: https://github.com/syntax-tree/.github/blob/HEAD/support.md
 
-[coc]: https://github.com/syntax-tree/.github/blob/master/code-of-conduct.md
+[coc]: https://github.com/syntax-tree/.github/blob/HEAD/code-of-conduct.md
 
 [hast]: https://github.com/syntax-tree/hast
 
