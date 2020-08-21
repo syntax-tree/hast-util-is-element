@@ -24,6 +24,7 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "files": [
+    "convert.js",
     "index.js"
   ],
   "dependencies": {},
@@ -58,7 +59,9 @@
     "prettier": true,
     "esnext": false,
     "rules": {
-      "unicorn/prefer-includes": "off"
+      "max-params": "off",
+      "unicorn/prefer-includes": "off",
+      "unicorn/prefer-reflect-apply": "off"
     },
     "ignores": [
       "hast-util-is-element.js"

@@ -33,30 +33,55 @@ is({type: 'element', tagName: 'a'}, ['a', 'area']) // => true
 
 ## API
 
-### `isElement(node[, tagName|tagNames])`
+### `isElement(node[, test[, index, parent[, context]]])`
 
 Check if the given value is a (certain) [*element*][element].
 
-*   When given a `tagName` or `tagNames`, checks that `node` is an
-    [*element*][element] whose `tagName` field matches `tagName` or is included
-    in `tagNames`
-*   Otherwise checks that `node` is an [*element*][element]
-
-###### Parameters
-
-*   `node` (`*`) — Value to check, probably [`Node`][node]
-*   `tagName` (`string`, optional) — Value that `node`s `tagName` field should
-    match
-*   `tagNames` (`Array.<string>`, optional) — Values that should include `node`s
-    `tagName` field should match
+*   `node` ([`Node`][node]) — Node to check.
+*   `test` ([`Function`][test], `string`, or `Array.<Test>`, optional)
+    — When `array`, checks if any one of the subtests pass.
+    When `string`, checks that the element has that tag name.
+    When `function`, see [`test`][test]
+*   `index` (`number`, optional) — [Index][] of `node` in `parent`
+*   `parent` ([`Node`][node], optional) — [Parent][] of `node`
+*   `context` (`*`, optional) — Context object to invoke `test` with
 
 ###### Returns
 
-`boolean` — whether `node` passes the test.
+`boolean` — Whether `test` passed *and* `node` is an [`Element`][element].
 
 ###### Throws
 
-`Error` — When the second parameter is given but invalid.
+`Error` — When an incorrect `test`, `index`, or `parent` is given.
+A `node` that is not a node, or not an element, does not throw.
+
+#### `function test(element[, index, parent])`
+
+###### Parameters
+
+*   `element` ([`Element`][element]) — Element to check
+*   `index` (`number?`) — [Index][] of `node` in `parent`
+*   `parent` ([`Node?`][node]) — [Parent][] of `node`
+
+###### Context
+
+`*` — The to `is` given `context`.
+
+###### Returns
+
+`boolean?` — Whether `element` matches.
+
+### `isElement.convert(test)`
+
+Create a test function from `test`, that can later be called with a `node`,
+`index`, and `parent`.
+Useful if you’re going to test many nodes, for example when creating a utility
+where something else passes a compatible test.
+
+The created function is slightly faster because it expects valid input only.
+Therefore, passing invalid input, yields unexpected results.
+
+Can also be accessed with `require('hast-util-is-element/convert')`.
 
 ## Security
 
@@ -155,5 +180,11 @@ abide by its terms.
 [node]: https://github.com/syntax-tree/unist#node
 
 [element]: https://github.com/syntax-tree/hast#element
+
+[parent]: https://github.com/syntax-tree/unist#parent-1
+
+[index]: https://github.com/syntax-tree/unist#index
+
+[test]: #function-testelement-index-parent
 
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
