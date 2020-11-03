@@ -137,9 +137,9 @@ abide by its terms.
 
 <!-- Definition -->
 
-[build-badge]: https://img.shields.io/travis/syntax-tree/hast-util-is-element.svg
+[build-badge]: https://github.com/syntax-tree/hast-util-is-element/workflows/main/badge.svg
 
-[build]: https://travis-ci.org/syntax-tree/hast-util-is-element
+[build]: https://github.com/syntax-tree/hast-util-is-element/actions
 
 [coverage-badge]: https://img.shields.io/codecov/c/github/syntax-tree/hast-util-is-element.svg
 
