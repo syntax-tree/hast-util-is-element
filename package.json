@@ -58,14 +58,22 @@
   "xo": {
     "prettier": true,
     "esnext": false,
-    "rules": {
-      "max-params": "off",
-      "unicorn/prefer-includes": "off",
-      "unicorn/prefer-reflect-apply": "off"
-    },
     "ignores": [
       "hast-util-is-element.js"
-    ]
+    ],
+    "rules": {
+      "eqeqeq": [
+        "error",
+        "always",
+        {
+          "null": "ignore"
+        }
+      ],
+      "max-params": "off",
+      "no-eq-null": "off",
+      "unicorn/prefer-type-error": "off",
+      "unicorn/prefer-reflect-apply": "off"
+    }
   },
   "nyc": {
     "check-coverage": true,

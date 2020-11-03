@@ -8,18 +8,16 @@ isElement.convert = convert
 
 // Check if if `node` is an `element` and whether it passes the given test.
 function isElement(node, test, index, parent, context) {
-  var hasParent = parent !== null && parent !== undefined
-  var hasIndex = index !== null && index !== undefined
   var check = convert(test)
 
   if (
-    hasIndex &&
+    index != null &&
     (typeof index !== 'number' || index < 0 || index === Infinity)
   ) {
     throw new Error('Expected positive finite index for child node')
   }
 
-  if (hasParent && (!parent.type || !parent.children)) {
+  if (parent != null && (!parent.type || !parent.children)) {
     throw new Error('Expected parent node')
   }
 
@@ -27,7 +25,7 @@ function isElement(node, test, index, parent, context) {
     return false
   }
 
-  if (hasParent !== hasIndex) {
+  if ((parent == null) !== (index == null)) {
     throw new Error('Expected both parent and index')
   }
 

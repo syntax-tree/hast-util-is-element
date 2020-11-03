@@ -3,16 +3,16 @@
 module.exports = convert
 
 function convert(test) {
+  if (test == null) {
+    return element
+  }
+
   if (typeof test === 'string') {
     return tagNameFactory(test)
   }
 
-  if (test === null || test === undefined) {
-    return element
-  }
-
   if (typeof test === 'object') {
-    return any(test)
+    return anyFactory(test)
   }
 
   if (typeof test === 'function') {
@@ -22,28 +22,20 @@ function convert(test) {
   throw new Error('Expected function, string, or array as test')
 }
 
-function convertAll(tests) {
-  var length = tests.length
+function anyFactory(tests) {
   var index = -1
-  var results = []
+  var checks = []
 
-  while (++index < length) {
-    results[index] = convert(tests[index])
+  while (++index < tests.length) {
+    checks[index] = convert(tests[index])
   }
 
-  return results
-}
+  return any
 
-function any(tests) {
-  var checks = convertAll(tests)
-  var length = checks.length
-
-  return matches
-
-  function matches() {
+  function any() {
     var index = -1
 
-    while (++index < length) {
+    while (++index < checks.length) {
       if (checks[index].apply(this, arguments)) {
         return true
       }
