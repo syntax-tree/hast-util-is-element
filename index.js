@@ -30,6 +30,16 @@
 /**
  * Check if a node is an element and passes a certain node test
  *
+ * @callback AssertAnything
+ * @param {unknown} [node]
+ * @param {number} [index]
+ * @param {Parent} [parent]
+ * @returns {boolean}
+ */
+
+/**
+ * Check if a node is an element and passes a certain node test
+ *
  * @template {Element} Y
  * @callback AssertPredicate
  * @param {unknown} [node]
@@ -46,7 +56,7 @@ export const isElement =
    *
    * @type {(
    *   (<T extends Element>(node: unknown, test: T['tagName']|TestFunctionPredicate<T>|Array.<T['tagName']|TestFunctionPredicate<T>>, index?: number, parent?: Parent, context?: unknown) => node is T) &
-   *   ((node?: unknown, test?: null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>, index?: number, parent?: Parent, context?: unknown) => node is Element)
+   *   ((node?: unknown, test?: null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>, index?: number, parent?: Parent, context?: unknown) => boolean)
    * )}
    */
   (
@@ -107,7 +117,7 @@ export const convertElement =
   /**
    * @type {(
    *   (<T extends Element>(test: T['tagName']|TestFunctionPredicate<T>) => AssertPredicate<T>) &
-   *   ((test?: null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>) => AssertPredicate<Element>)
+   *   ((test?: null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>) => AssertAnything)
    * )}
    */
   (
@@ -119,7 +129,7 @@ export const convertElement =
      * When `function` checks if function passed the node is true.
      * When `object`, checks that all keys in test are in node, and that they have (strictly) equal values.
      * When `array`, checks any one of the subtests pass.
-     * @returns {AssertPredicate<Element>}
+     * @returns {AssertAnything}
      */
     function (test) {
       if (test === undefined || test === null) {
@@ -144,10 +154,10 @@ export const convertElement =
 
 /**
  * @param {Array.<TagName|TestFunctionAnything>} tests
- * @returns {AssertPredicate<Element>}
+ * @returns {AssertAnything}
  */
 function anyFactory(tests) {
-  /** @type {Array.<AssertPredicate<Element>>} */
+  /** @type {Array.<AssertAnything>} */
   var checks = []
   var index = -1
 
@@ -160,7 +170,7 @@ function anyFactory(tests) {
   /**
    * @this {unknown}
    * @param {unknown[]} parameters
-   * @returns {node is Element}
+   * @returns {boolean}
    */
   function any(...parameters) {
     var index = -1
@@ -180,14 +190,14 @@ function anyFactory(tests) {
  * name for said string.
  *
  * @param {TagName} check
- * @returns {AssertPredicate<Element>}
+ * @returns {AssertAnything}
  */
 function tagNameFactory(check) {
   return tagName
 
   /**
    * @param {Node} node
-   * @returns {node is Element}
+   * @returns {boolean}
    */
   function tagName(node) {
     return element(node) && node.tagName === check
@@ -196,7 +206,7 @@ function tagNameFactory(check) {
 
 /**
  * @param {TestFunctionAnything} check
- * @returns {AssertPredicate<Element>}
+ * @returns {AssertAnything}
  */
 function castFactory(check) {
   return assertion
@@ -205,7 +215,7 @@ function castFactory(check) {
    * @this {unknown}
    * @param {Node} node
    * @param {Array.<unknown>} parameters
-   * @returns {node is Element}
+   * @returns {boolean}
    */
   function assertion(node, ...parameters) {
     return element(node) && Boolean(check.call(this, node, ...parameters))
@@ -215,7 +225,7 @@ function castFactory(check) {
 /**
  * Utility to return true if this is an element.
  * @param {unknown} node
- * @returns {node is Element}
+ * @returns {boolean}
  */
 function element(node) {
   return Boolean(
