@@ -1,3 +1,8 @@
+/**
+ * @typedef {import('unist').Parent} Parent
+ * @typedef {import('hast').Element} Element
+ */
+
 import test from 'tape'
 import {isElement} from './index.js'
 
@@ -7,6 +12,7 @@ test('isElement', function (t) {
 
   t.throws(
     function () {
+      // @ts-ignore runtime.
       isElement(null, true)
     },
     /Expected function, string, or array as test/,
@@ -134,6 +140,12 @@ test('isElement', function (t) {
     st.equal(
       isElement(
         root.children[0],
+        /**
+         * @this {ctx}
+         * @param {Element} a
+         * @param {number} b
+         * @param {Parent} c
+         */
         function (node, index, parent) {
           st.equal(node, root.children[0], 'should pass `node` to test')
           st.equal(index, 0, 'should pass `index` to test')
@@ -166,6 +178,7 @@ test('isElement', function (t) {
 
     st.throws(
       function () {
+        // @ts-ignore runtime.
         isElement(root.children[0], function () {}, false)
       },
       /Expected positive finite index for child node/,
@@ -190,6 +203,7 @@ test('isElement', function (t) {
 
     st.throws(
       function () {
+        // @ts-ignore runtime.
         isElement(root.children[0], function () {}, 0, true)
       },
       /Expected parent node/,
@@ -198,6 +212,7 @@ test('isElement', function (t) {
 
     st.throws(
       function () {
+        // @ts-ignore runtime.
         isElement(root.children[0], function () {}, 0, {type: 'root'})
       },
       /Expected parent node/,
