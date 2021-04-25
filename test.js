@@ -184,7 +184,7 @@ test('isElement', function (t) {
 
     st.throws(
       function () {
-        isElement(root.children[0], function () {}, Infinity)
+        isElement(root.children[0], function () {}, Number.POSITIVE_INFINITY)
       },
       /Expected positive finite index for child node/,
       'should throw if `index` is infinity'

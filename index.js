@@ -12,7 +12,9 @@ function isElement(node, test, index, parent, context) {
 
   if (
     index != null &&
-    (typeof index !== 'number' || index < 0 || index === Infinity)
+    (typeof index !== 'number' ||
+      index < 0 ||
+      index === Number.POSITIVE_INFINITY)
   ) {
     throw new Error('Expected positive finite index for child node')
   }
