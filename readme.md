@@ -13,6 +13,9 @@
 
 ## Install
 
+This package is [ESM only](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c):
+Node 12+ is needed to use it and it must be `import`ed instead of `require`d.
+
 [npm][]:
 
 ```sh
@@ -22,16 +25,19 @@ npm install hast-util-is-element
 ## Use
 
 ```js
-var is = require('hast-util-is-element')
+import {isElement} from 'hast-util-is-element'
 
-is({type: 'text', value: 'foo'}) // => false
+isElement({type: 'text', value: 'foo'}) // => false
 
-is({type: 'element', tagName: 'a'}, 'a') // => true
+isElement({type: 'element', tagName: 'a'}, 'a') // => true
 
-is({type: 'element', tagName: 'a'}, ['a', 'area']) // => true
+isElement({type: 'element', tagName: 'a'}, ['a', 'area']) // => true
 ```
 
 ## API
+
+This package exports the following identifiers: `isElement`, `convertElement`.
+There is no default export.
 
 ### `isElement(node[, test[, index, parent[, context]]])`
 
@@ -71,7 +77,7 @@ A `node` that is not a node, or not an element, does not throw.
 
 `boolean?` — Whether `element` matches.
 
-### `isElement.convert(test)`
+### `convertElement(test)`
 
 Create a test function from `test`, that can later be called with a `node`,
 `index`, and `parent`.
@@ -80,8 +86,6 @@ where something else passes a compatible test.
 
 The created function is slightly faster because it expects valid input only.
 Therefore, passing invalid input, yields unexpected results.
-
-Can also be accessed with `require('hast-util-is-element/convert')`.
 
 ## Security
 

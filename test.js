@@ -1,7 +1,5 @@
-'use strict'
-
-var test = require('tape')
-var isElement = require('.')
+import test from 'tape'
+import {isElement} from './index.js'
 
 test('isElement', function (t) {
   t.equal(isElement(), false, 'should return `false` without node')
