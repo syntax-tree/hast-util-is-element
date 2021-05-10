@@ -4,6 +4,7 @@
  * @typedef {import('hast').Element} Element
  *
  * @typedef {string} TagName
+ * @typedef {null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>} Test
  */
 
 /**
@@ -56,7 +57,7 @@ export const isElement =
    *
    * @type {(
    *   (<T extends Element>(node: unknown, test: T['tagName']|TestFunctionPredicate<T>|Array.<T['tagName']|TestFunctionPredicate<T>>, index?: number, parent?: Parent, context?: unknown) => node is T) &
-   *   ((node?: unknown, test?: null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>, index?: number, parent?: Parent, context?: unknown) => boolean)
+   *   ((node?: unknown, test?: Test, index?: number, parent?: Parent, context?: unknown) => boolean)
    * )}
    */
   (
@@ -65,8 +66,7 @@ export const isElement =
      * When a `parent` node is known the `index` of node should also be given.
      *
      * @param {unknown} [node] Node to check
-     * @param {null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>} [test]
-     * When nullish, checks if `node` is a `Node`.
+     * @param {Test} [test] When nullish, checks if `node` is a `Node`.
      * When `string`, works like passing `function (node) {return node.type === test}`.
      * When `function` checks if function passed the node is true.
      * When `array`, checks any one of the subtests pass.
@@ -117,13 +117,13 @@ export const convertElement =
   /**
    * @type {(
    *   (<T extends Element>(test: T['tagName']|TestFunctionPredicate<T>) => AssertPredicate<T>) &
-   *   ((test?: null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>) => AssertAnything)
+   *   ((test?: Test) => AssertAnything)
    * )}
    */
   (
     /**
      * Generate an assertion from a check.
-     * @param {null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>} [test]
+     * @param {Test} [test]
      * When nullish, checks if `node` is a `Node`.
      * When `string`, works like passing `function (node) {return node.type === test}`.
      * When `function` checks if function passed the node is true.
