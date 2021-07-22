@@ -12,7 +12,7 @@ test('isElement', (t) => {
 
   t.throws(
     () => {
-      // @ts-ignore runtime.
+      // @ts-expect-error runtime.
       isElement(null, true)
     },
     /Expected function, string, or array as test/,
@@ -178,7 +178,7 @@ test('isElement', (t) => {
 
     st.throws(
       () => {
-        // @ts-ignore runtime.
+        // @ts-expect-error runtime.
         isElement(root.children[0], () => {}, false)
       },
       /Expected positive finite index for child node/,
@@ -203,7 +203,7 @@ test('isElement', (t) => {
 
     st.throws(
       () => {
-        // @ts-ignore runtime.
+        // @ts-expect-error runtime.
         isElement(root.children[0], () => {}, 0, true)
       },
       /Expected parent node/,
@@ -212,7 +212,7 @@ test('isElement', (t) => {
 
     st.throws(
       () => {
-        // @ts-ignore runtime.
+        // @ts-expect-error runtime.
         isElement(root.children[0], () => {}, 0, {type: 'root'})
       },
       /Expected parent node/,

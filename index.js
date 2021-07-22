@@ -97,7 +97,7 @@ export const isElement =
         throw new Error('Expected parent node')
       }
 
-      // @ts-ignore Looks like a node.
+      // @ts-expect-error Looks like a node.
       if (!node || !node.type || typeof node.type !== 'string') {
         return false
       }
@@ -196,7 +196,7 @@ function tagNameFactory(check) {
   return tagName
 
   /**
-   * @param {Node} node
+   * @param {unknown} node
    * @returns {boolean}
    */
   function tagName(node) {
@@ -213,11 +213,12 @@ function castFactory(check) {
 
   /**
    * @this {unknown}
-   * @param {Node} node
+   * @param {unknown} node
    * @param {Array.<unknown>} parameters
    * @returns {boolean}
    */
   function assertion(node, ...parameters) {
+    // @ts-expect-error: fine.
     return element(node) && Boolean(check.call(this, node, ...parameters))
   }
 }
@@ -231,9 +232,9 @@ function element(node) {
   return Boolean(
     node &&
       typeof node === 'object' &&
-      // @ts-ignore Looks like a node.
+      // @ts-expect-error Looks like a node.
       node.type === 'element' &&
-      // @ts-ignore Looks like an element.
+      // @ts-expect-error Looks like an element.
       typeof node.tagName === 'string'
   )
 }
