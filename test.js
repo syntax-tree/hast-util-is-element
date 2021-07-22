@@ -6,12 +6,12 @@
 import test from 'tape'
 import {isElement} from './index.js'
 
-test('isElement', function (t) {
+test('isElement', (t) => {
   t.equal(isElement(), false, 'should return `false` without node')
   t.equal(isElement(null), false, 'should return `false` with `null`')
 
   t.throws(
-    function () {
+    () => {
       // @ts-ignore runtime.
       isElement(null, true)
     },
@@ -19,7 +19,7 @@ test('isElement', function (t) {
     'should throw when the second parameter is invalid'
   )
 
-  t.test('isElement(node)', function (st) {
+  t.test('isElement(node)', (st) => {
     st.equal(
       isElement({type: 'text'}),
       false,
@@ -41,7 +41,7 @@ test('isElement', function (t) {
     st.end()
   })
 
-  t.test('isElement(node, tagName)', function (st) {
+  t.test('isElement(node, tagName)', (st) => {
     st.equal(
       isElement({type: 'text'}, 'div'),
       false,
@@ -69,7 +69,7 @@ test('isElement', function (t) {
     st.end()
   })
 
-  t.test('isElement(node, tagNames)', function (st) {
+  t.test('isElement(node, tagNames)', (st) => {
     st.equal(
       isElement({type: 'text'}, ['div']),
       false,
@@ -103,9 +103,9 @@ test('isElement', function (t) {
     st.end()
   })
 
-  t.test('isElement(node, test)', function (st) {
+  t.test('isElement(node, test)', (st) => {
     st.equal(
-      isElement({type: 'text'}, function () {
+      isElement({type: 'text'}, () => {
         throw new Error('!')
       }),
       false,
@@ -113,7 +113,7 @@ test('isElement', function (t) {
     )
 
     st.equal(
-      isElement({type: 'element', tagName: 'a', children: []}, function (node) {
+      isElement({type: 'element', tagName: 'a', children: []}, (node) => {
         return node.children.length === 0
       }),
       true,
@@ -123,7 +123,7 @@ test('isElement', function (t) {
     st.equal(
       isElement(
         {type: 'element', tagName: 'a', children: [{type: 'text'}]},
-        function (node) {
+        (node) => {
           return node.children.length === 0
         }
       ),
@@ -131,8 +131,8 @@ test('isElement', function (t) {
       'should call `test` if the given node is a valid element (2)'
     )
 
-    var ctx = {}
-    var root = {
+    const ctx = {}
+    const root = {
       type: 'root',
       children: [{type: 'element', tagName: 'a', children: []}]
     }
@@ -161,59 +161,59 @@ test('isElement', function (t) {
     )
 
     st.throws(
-      function () {
-        isElement(root.children[0], function () {}, 0)
+      () => {
+        isElement(root.children[0], () => {}, 0)
       },
       /Expected both parent and index/,
       'should throw if `index` is passed but not `parent`'
     )
 
     st.throws(
-      function () {
-        isElement(root.children[0], function () {}, undefined, root)
+      () => {
+        isElement(root.children[0], () => {}, undefined, root)
       },
       /Expected both parent and index/,
       'should throw if `parent` is passed but not `index`'
     )
 
     st.throws(
-      function () {
+      () => {
         // @ts-ignore runtime.
-        isElement(root.children[0], function () {}, false)
+        isElement(root.children[0], () => {}, false)
       },
       /Expected positive finite index for child node/,
       'should throw if `index` is not a number'
     )
 
     st.throws(
-      function () {
-        isElement(root.children[0], function () {}, -1)
+      () => {
+        isElement(root.children[0], () => {}, -1)
       },
       /Expected positive finite index for child node/,
       'should throw if `index` is negative'
     )
 
     st.throws(
-      function () {
-        isElement(root.children[0], function () {}, Number.POSITIVE_INFINITY)
+      () => {
+        isElement(root.children[0], () => {}, Number.POSITIVE_INFINITY)
       },
       /Expected positive finite index for child node/,
       'should throw if `index` is infinity'
     )
 
     st.throws(
-      function () {
+      () => {
         // @ts-ignore runtime.
-        isElement(root.children[0], function () {}, 0, true)
+        isElement(root.children[0], () => {}, 0, true)
       },
       /Expected parent node/,
       'should throw if `parent` is not a node'
     )
 
     st.throws(
-      function () {
+      () => {
         // @ts-ignore runtime.
-        isElement(root.children[0], function () {}, 0, {type: 'root'})
+        isElement(root.children[0], () => {}, 0, {type: 'root'})
       },
       /Expected parent node/,
       'should throw if `parent` is not a parent'

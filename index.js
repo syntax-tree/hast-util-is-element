@@ -77,7 +77,7 @@ export const isElement =
      */
     // eslint-disable-next-line max-params
     function (node, test, index, parent, context) {
-      var check = convertElement(test)
+      const check = convertElement(test)
 
       if (
         index !== undefined &&
@@ -158,8 +158,8 @@ export const convertElement =
  */
 function anyFactory(tests) {
   /** @type {Array.<AssertAnything>} */
-  var checks = []
-  var index = -1
+  const checks = []
+  let index = -1
 
   while (++index < tests.length) {
     checks[index] = convertElement(tests[index])
@@ -173,7 +173,7 @@ function anyFactory(tests) {
    * @returns {boolean}
    */
   function any(...parameters) {
-    var index = -1
+    let index = -1
 
     while (++index < checks.length) {
       if (checks[index].call(this, ...parameters)) {
