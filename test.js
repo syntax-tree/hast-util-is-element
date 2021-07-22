@@ -113,9 +113,10 @@ test('isElement', (t) => {
     )
 
     st.equal(
-      isElement({type: 'element', tagName: 'a', children: []}, (node) => {
-        return node.children.length === 0
-      }),
+      isElement(
+        {type: 'element', tagName: 'a', children: []},
+        (node) => node.children.length === 0
+      ),
       true,
       'should call `test` if the given node is a valid element (1)'
     )
@@ -123,9 +124,7 @@ test('isElement', (t) => {
     st.equal(
       isElement(
         {type: 'element', tagName: 'a', children: [{type: 'text'}]},
-        (node) => {
-          return node.children.length === 0
-        }
+        (node) => node.children.length === 0
       ),
       false,
       'should call `test` if the given node is a valid element (2)'
