@@ -225,7 +225,7 @@ function castFactory(check) {
 /**
  * Utility to return true if this is an element.
  * @param {unknown} node
- * @returns {boolean}
+ * @returns {node is Element}
  */
 function element(node) {
   return Boolean(
