@@ -1,4 +1,4 @@
-import unified from 'unified'
+import {unified} from 'unified'
 import {Node} from 'unist'
 import {expectType, expectNotType, expectError} from 'tsd'
 import {Element} from 'hast'
