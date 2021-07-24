@@ -12,8 +12,8 @@
  *
  * @callback TestFunctionAnything
  * @param {Element} element
- * @param {number} [index]
- * @param {Parent} [parent]
+ * @param {number|null|undefined} [index]
+ * @param {Parent|null|undefined} [parent]
  * @returns {boolean|void}
  */
 
@@ -23,8 +23,8 @@
  * @template {Element} X
  * @callback TestFunctionPredicate
  * @param {X} element
- * @param {number} [index]
- * @param {Parent} [parent]
+ * @param {number|null|undefined} [index]
+ * @param {Parent|null|undefined} [parent]
  * @returns {element is X}
  */
 
@@ -33,8 +33,8 @@
  *
  * @callback AssertAnything
  * @param {unknown} [node]
- * @param {number} [index]
- * @param {Parent} [parent]
+ * @param {number|null|undefined} [index]
+ * @param {Parent|null|undefined} [parent]
  * @returns {boolean}
  */
 
@@ -44,8 +44,8 @@
  * @template {Element} Y
  * @callback AssertPredicate
  * @param {unknown} [node]
- * @param {number} [index]
- * @param {Parent} [parent]
+ * @param {number|null|undefined} [index]
+ * @param {Parent|null|undefined} [parent]
  * @returns {node is Y}
  */
 
