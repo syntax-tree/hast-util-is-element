@@ -30,7 +30,7 @@ const article: Element = {
 const isSection = (element: Element): element is Section =>
   element.tagName === 'section'
 
-isElement()
+expectType<false>(isElement())
 
 /* Missing parameters. */
 expectError(isElement<Section>())
@@ -133,3 +133,32 @@ convertElement()
 convertElement(null)
 convertElement(undefined)
 expectError(convertElement<Article>())
+
+declare const node: unknown
+
+/* Type assertion */
+if (isElement(node)) {
+  expectType<Element>(node)
+}
+
+if (
+  isElement<Section>(
+    node,
+    (node): node is Section => 'tagName' in node && node.tagName === 'section'
+  )
+) {
+  expectType<Section>(node)
+}
+
+if (isElement(node, node => 'children' in node)) {
+  expectType<unknown>(node)
+} else {
+  expectType<unknown>(node)
+}
+
+
+if (isElement(node) && 'children' in node) {
+  expectType<Element>(node)
+} else {
+  expectType<unknown>(node)
+}
