@@ -161,9 +161,10 @@ if (isElement(node, (node) => node.children.length > 0)) {
 }
 
 /**
- * This is suggested to be used because `isElement(node)` is a correct assertion,
- * but with a second param `test` which is not an assertion,
- * the whole `isElement(node, test)` expression can not be an assertion anymore.
+ * This is the suggested use of this package so TypeScript can infer what types
+ * it’s working with.
+ * This way, `node` as an `Element` in the if-branch, and it could still be an
+ * element (or something else) in the else-branch.
  */
 if (isElement(node) && node.children.length > 0) {
   expectType<Element>(node)
