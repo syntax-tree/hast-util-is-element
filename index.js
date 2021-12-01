@@ -27,7 +27,7 @@
  *
  * @template {Element} X
  * @callback TestFunctionPredicate
- * @param {X} element
+ * @param {Element} element
  * @param {number|null|undefined} [index]
  * @param {Parent|null|undefined} [parent]
  * @returns {element is X}

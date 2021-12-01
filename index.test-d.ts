@@ -141,23 +141,26 @@ if (isElement(node)) {
   expectType<Element>(node)
 }
 
-if (
-  isElement<Section>(
-    node,
-    (node): node is Section => 'tagName' in node && node.tagName === 'section'
-  )
-) {
+if (isElement(node, (node): node is Section => node.tagName === 'section')) {
   expectType<Section>(node)
 }
 
-if (isElement(node, node => 'children' in node)) {
+/**
+ * Should prefer `isElement(node) && node.children.length > 0`,
+ * see below comments for details.
+ */
+if (isElement(node, (node) => node.children.length > 0)) {
   expectType<unknown>(node)
 } else {
   expectType<unknown>(node)
 }
 
-
-if (isElement(node) && 'children' in node) {
+/**
+ * This is suggested to be used because `isElement(node)` is a correct assertion,
+ * but with a second param `test` which is not an assertion,
+ * the whole `isElement(node, test)` expression can not be an assertion anymore.
+ */
+if (isElement(node) && node.children.length > 0) {
   expectType<Element>(node)
 } else {
   expectType<unknown>(node)
