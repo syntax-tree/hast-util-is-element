@@ -146,8 +146,13 @@ if (isElement(node, (node): node is Section => node.tagName === 'section')) {
 }
 
 /**
- * Should prefer `isElement(node) && node.children.length > 0`,
- * see below comments for details.
+ * This test demonstrates that, while the test definitely asserts that `node`
+ * is an element, it asserts that it is *some* kind of element.
+ * If we’d define `node` as an `Element` in the if-branch (which is correct),
+ * TypeScript will think `node` is *not* an `Element` in the else-branch (which
+ * is incorrect).
+ * We can’t solve this in this project, but users can change their code (see
+ * next example).
  */
 if (isElement(node, (node) => node.children.length > 0)) {
   expectType<unknown>(node)
