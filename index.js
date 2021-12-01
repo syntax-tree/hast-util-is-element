@@ -62,8 +62,7 @@ export const isElement =
    *
    * @type {(
    *   (() => false) &
-   *   (<T extends Element>(node: unknown, test: PredicateTest<T>, index?: number, parent?: Parent, context?: unknown) => node is T) &
-   *   ((node: unknown, test?: PredicateTest<Element>, index?: number, parent?: Parent, context?: unknown) => node is Element) &
+   *   (<T extends Element = Element>(node: unknown, test?: PredicateTest<T>, index?: number, parent?: Parent, context?: unknown) => node is T) &
    *   ((node: unknown, test: Test, index?: number, parent?: Parent, context?: unknown) => boolean)
    * )}
    */
