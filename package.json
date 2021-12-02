@@ -1,6 +1,6 @@
 {
   "name": "hast-util-is-element",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "hast utility to check if a node is a (certain) element",
   "license": "MIT",
   "keywords": [
