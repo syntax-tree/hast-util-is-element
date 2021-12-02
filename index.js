@@ -8,6 +8,11 @@
  */
 
 /**
+ * @template {Element} T
+ * @typedef {null|undefined|T['tagName']|TestFunctionPredicate<T>|Array.<T['tagName']|TestFunctionPredicate<T>>} PredicateTest
+ */
+
+/**
  * Check if an element passes a test
  *
  * @callback TestFunctionAnything
@@ -22,7 +27,7 @@
  *
  * @template {Element} X
  * @callback TestFunctionPredicate
- * @param {X} element
+ * @param {Element} element
  * @param {number|null|undefined} [index]
  * @param {Parent|null|undefined} [parent]
  * @returns {element is X}
@@ -56,8 +61,9 @@ export const isElement =
    * When a `parent` node is known the `index` of node should also be given.
    *
    * @type {(
-   *   (<T extends Element>(node: unknown, test: T['tagName']|TestFunctionPredicate<T>|Array.<T['tagName']|TestFunctionPredicate<T>>, index?: number, parent?: Parent, context?: unknown) => node is T) &
-   *   ((node?: unknown, test?: Test, index?: number, parent?: Parent, context?: unknown) => boolean)
+   *   (() => false) &
+   *   (<T extends Element = Element>(node: unknown, test?: PredicateTest<T>, index?: number, parent?: Parent, context?: unknown) => node is T) &
+   *   ((node: unknown, test: Test, index?: number, parent?: Parent, context?: unknown) => boolean)
    * )}
    */
   (

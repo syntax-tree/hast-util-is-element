@@ -30,7 +30,7 @@ const article: Element = {
 const isSection = (element: Element): element is Section =>
   element.tagName === 'section'
 
-isElement()
+expectType<false>(isElement())
 
 /* Missing parameters. */
 expectError(isElement<Section>())
@@ -133,3 +133,41 @@ convertElement()
 convertElement(null)
 convertElement(undefined)
 expectError(convertElement<Article>())
+
+declare const node: unknown
+
+/* Type assertion */
+if (isElement(node)) {
+  expectType<Element>(node)
+}
+
+if (isElement(node, (node): node is Section => node.tagName === 'section')) {
+  expectType<Section>(node)
+}
+
+/**
+ * This test demonstrates that, while the test definitely asserts that `node`
+ * is an element, it asserts that it is *some* kind of element.
+ * If we’d define `node` as an `Element` in the if-branch (which is correct),
+ * TypeScript will think `node` is *not* an `Element` in the else-branch (which
+ * is incorrect).
+ * We can’t solve this in this project, but users can change their code (see
+ * next example).
+ */
+if (isElement(node, (node) => node.children.length > 0)) {
+  expectType<unknown>(node)
+} else {
+  expectType<unknown>(node)
+}
+
+/**
+ * This is the suggested use of this package so TypeScript can infer what types
+ * it’s working with.
+ * This way, `node` as an `Element` in the if-branch, and it could still be an
+ * element (or something else) in the else-branch.
+ */
+if (isElement(node) && node.children.length > 0) {
+  expectType<Element>(node)
+} else {
+  expectType<unknown>(node)
+}
