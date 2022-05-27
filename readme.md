@@ -44,7 +44,7 @@ There is no default export.
 Check if the given value is a (certain) [*element*][element].
 
 *   `node` ([`Node`][node]) — Node to check.
-*   `test` ([`Function`][test], `string`, or `Array.<Test>`, optional)
+*   `test` ([`Function`][test], `string`, or `Array<Test>`, optional)
     — When `array`, checks if any one of the subtests pass.
     When `string`, checks that the element has that tag name.
     When `function`, see [`test`][test]

@@ -4,12 +4,12 @@
  * @typedef {import('hast').Element} Element
  *
  * @typedef {string} TagName
- * @typedef {null|undefined|TagName|TestFunctionAnything|Array.<TagName|TestFunctionAnything>} Test
+ * @typedef {null|undefined|TagName|TestFunctionAnything|Array<TagName|TestFunctionAnything>} Test
  */
 
 /**
  * @template {Element} T
- * @typedef {null|undefined|T['tagName']|TestFunctionPredicate<T>|Array.<T['tagName']|TestFunctionPredicate<T>>} PredicateTest
+ * @typedef {null|undefined|T['tagName']|TestFunctionPredicate<T>|Array<T['tagName']|TestFunctionPredicate<T>>} PredicateTest
  */
 
 /**
@@ -159,11 +159,11 @@ export const convertElement =
   )
 
 /**
- * @param {Array.<TagName|TestFunctionAnything>} tests
+ * @param {Array<TagName|TestFunctionAnything>} tests
  * @returns {AssertAnything}
  */
 function anyFactory(tests) {
-  /** @type {Array.<AssertAnything>} */
+  /** @type {Array<AssertAnything>} */
   const checks = []
   let index = -1
 
@@ -175,7 +175,7 @@ function anyFactory(tests) {
 
   /**
    * @this {unknown}
-   * @param {unknown[]} parameters
+   * @param {Array<unknown>} parameters
    * @returns {boolean}
    */
   function any(...parameters) {
@@ -220,7 +220,7 @@ function castFactory(check) {
   /**
    * @this {unknown}
    * @param {unknown} node
-   * @param {Array.<unknown>} parameters
+   * @param {Array<unknown>} parameters
    * @returns {boolean}
    */
   function assertion(node, ...parameters) {
