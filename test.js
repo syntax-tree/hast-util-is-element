@@ -141,9 +141,9 @@ test('isElement', (t) => {
         root.children[0],
         /**
          * @this {ctx}
-         * @param {Element} a
-         * @param {number} b
-         * @param {Parent} c
+         * @param {Element} node
+         * @param {number|undefined|null} index
+         * @param {Parent|undefined|null} parent
          */
         function (node, index, parent) {
           st.equal(node, root.children[0], 'should pass `node` to test')
