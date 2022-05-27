@@ -4,7 +4,15 @@
  * @typedef {import('hast').Element} Element
  *
  * @typedef {string} TagName
+ *
  * @typedef {null|undefined|TagName|TestFunctionAnything|Array<TagName|TestFunctionAnything>} Test
+ *
+ * @callback TestFunctionAnything
+ *   Check if an element passes a test.
+ * @param {Element} element
+ * @param {number|null|undefined} [index]
+ * @param {Parent|null|undefined} [parent]
+ * @returns {boolean|void}
  */
 
 /**
@@ -13,17 +21,7 @@
  */
 
 /**
- * Check if an element passes a test
- *
- * @callback TestFunctionAnything
- * @param {Element} element
- * @param {number|null|undefined} [index]
- * @param {Parent|null|undefined} [parent]
- * @returns {boolean|void}
- */
-
-/**
- * Check if an element passes a certain node test
+ * Check if an element passes a certain node test.
  *
  * @template {Element} X
  * @callback TestFunctionPredicate
