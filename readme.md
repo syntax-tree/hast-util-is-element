@@ -19,6 +19,12 @@
 *   [API](#api)
     *   [`isElement(node[, test[, index, parent[, context]]])`](#iselementnode-test-index-parent-context)
     *   [`convertElement(test)`](#convertelementtest)
+    *   [`AssertAnything`](#assertanything)
+    *   [`AssertPredicate`](#assertpredicate)
+    *   [`Test`](#test)
+    *   [`TestFunctionAnything`](#testfunctionanything)
+    *   [`PredicateTest`](#predicatetest)
+    *   [`TestFunctionPredicate`](#testfunctionpredicate)
 *   [Types](#types)
 *   [Compatibility](#compatibility)
 *   [Security](#security)
@@ -43,7 +49,7 @@ to match against CSS selectors.
 ## Install
 
 This package is [ESM only][esm].
-In Node.js (version 12.20+, 14.14+, 16.0+, or 18.0+), install with [npm][]:
+In Node.js (version 14.14+ and 16.0+), install with [npm][]:
 
 ```sh
 npm install hast-util-is-element
@@ -69,87 +75,190 @@ In browsers with [`esm.sh`][esmsh]:
 import {isElement} from 'hast-util-is-element'
 
 isElement({type: 'text', value: 'foo'}) // => false
-
+isElement({type: 'element', tagName: 'a'}) // => true
 isElement({type: 'element', tagName: 'a'}, 'a') // => true
-
 isElement({type: 'element', tagName: 'a'}, ['a', 'area']) // => true
 ```
 
 ## API
 
-This package exports the identifiers `isElement` and `convertElement`.
+This package exports the identifiers [`isElement`][iselement] and
+[`convertElement`][convertelement].
 There is no default export.
 
 ### `isElement(node[, test[, index, parent[, context]]])`
 
-Check if the given value is a (certain) [*element*][element].
+Check if `node` is an `Element` and whether it passes the given test.
 
 ###### Parameters
 
-*   `node` ([`Node`][node]) — node to check
-*   `test` ([`Function`][test], `string`, or `Array<Test>`, optional)
-    — when `array`, checks if any one of the subtests pass.
-    When `string`, checks that the element has that tag name.
-    When `function`, see [`test`][test]
-*   `index` (`number`, optional) — [index][] of `node` in `parent`
-*   `parent` ([`Node`][node], optional) — [parent][] of `node`
-*   `context` (`*`, optional) — context object to call `test` with
+*   `node` (`unknown`)
+    — thing to check, typically [`Node`][node]
+*   `test` ([`Test`][test] or [`PredicateTest`][predicatetest], optional)
+    — a check for a specific element
+*   `index` (`number`, optional)
+    — the node’s position in its parent
+*   `parent` ([`Node`][node], optional)
+    — the node’s parent
+*   `context` (`any`, optional)
+    — context object (`this`) to call `test` with
 
 ###### Returns
 
-Whether `test` passed *and* `node` is an [`Element`][element] (`boolean`)
+Whether `node` is an [`Element`][element] and passes a test (`boolean`).
 
 ###### Throws
 
 When an incorrect `test`, `index`, or `parent` is given.
-A `node` that is not a node, or not an element, does not throw.
-
-#### `function test(element[, index, parent])`
-
-###### Parameters
-
-*   `this` — the to `is` given `context` (`*`)
-*   `element` ([`Element`][element]) — element to check
-*   `index` (`number?`) — [index][] of `node` in `parent`
-*   `parent` ([`Node?`][node]) — [parent][] of `node`
-
-###### Returns
-
-Whether `element` matches (`boolean?`).
+There is no error thrown when `node` is not a node or not an element.
 
 ### `convertElement(test)`
 
-Create a test function from `test`, that can later be called with a `node`,
-`index`, and `parent`.
-Useful if you’re going to test many nodes, for example when creating a utility
-where something else passes a compatible test.
+Generate a check from a test.
 
-The created function is slightly faster because it expects valid input only.
-Therefore, passing invalid input, yields unexpected results.
+Useful if you’re going to test many nodes, for example when creating a
+utility where something else passes a compatible test.
+
+The created function is a bit faster because it expects valid input only:
+a `node`, `index`, and `parent`.
+
+###### Parameters
+
+*   `test` ([`Test`][test] or [`PredicateTest`][predicatetest], optional)
+    — a check for a specific element
+
+###### Returns
+
+An assertion ([`AssertAnything`][assertanything] or
+[`AssertPredicate`][assertpredicate]).
+
+### `AssertAnything`
+
+Check that an arbitrary value is an element, unaware of TypeScript inferral
+(TypeScript type).
+
+###### Parameters
+
+*   `node` (`unknown`)
+    — anything (typically a node)
+*   `index` (`number`, optional)
+    — the node’s position in its parent
+*   `parent` ([`Node`][node], optional)
+    — the node’s parent
+
+###### Returns
+
+Whether this is an element and passes a test (`boolean`).
+
+### `AssertPredicate`
+
+Check that an arbitrary value is a specific element, aware of TypeScript
+(TypeScript type).
+
+###### Type parameters
+
+*   `T` ([`Element`][element])
+    — element type
+
+###### Parameters
+
+*   `node` (`unknown`)
+    — anything (typically a node)
+*   `index` (`number`, optional)
+    — the node’s position in its parent
+*   `parent` ([`Node`][node], optional)
+    — the node’s parent
+
+###### Returns
+
+Whether this is an element and passes a test (`node is T`).
+
+### `Test`
+
+Check for an arbitrary element, unaware of TypeScript inferral (TypeScript
+type).
+
+###### Type
+
+```ts
+type Test = null | undefined | string | TestFunctionAnything | Array<string | TestFunctionAnything>
+```
+
+Checks that the given thing is an element, and then:
+
+*   when `string`, checks that the element has that tag name
+*   when `function`, see  [`TestFunctionAnything`][testfunctionanything]
+*   when `Array`, checks if one of the subtests pass
+
+### `TestFunctionAnything`
+
+Check if an element passes a test, unaware of TypeScript inferral (TypeScript
+type).
+
+###### Parameters
+
+*   `element` ([`Element`][element])
+    — an element
+*   `index` (`number`, optional)
+    — the element’s position in its parent
+*   `parent` ([`Node`][node], optional)
+    — the element’s parent
+
+###### Returns
+
+Whether this element passes the test (`boolean`).
+
+### `PredicateTest`
+
+Check for an element that can be inferred by TypeScript (TypeScript type).
+
+###### Type
+
+```ts
+type PredicateTest<T extends Element> =
+  | T['tagName']
+  | TestFunctionPredicate<T>
+  | Array<T['tagName'] | TestFunctionPredicate<T>>
+```
+
+See [`TestFunctionPredicate`][testfunctionpredicate].
+
+### `TestFunctionPredicate`
+
+Check if an element passes a certain node test (TypeScript type).
+
+###### Type parameters
+
+*   `T` ([`Element`][element])
+    — element type
+
+###### Parameters
+
+*   `element` ([`Element`][element])
+    — an element
+*   `index` (`number`, optional)
+    — the element’s position in its parent
+*   `parent` ([`Node`][node], optional)
+    — the element’s parent
+
+###### Returns
+
+Whether this element passes the test (`element is T`).
 
 ## Types
 
 This package is fully typed with [TypeScript][].
-It exports the additional types:
-
-*   `TestFunctionAnything`
-    — models any test function
-*   `TestFunctionPredicate<T>` (where `T` extends `Element`)
-    — models a test function for `T`
-*   `Test`
-    — models any arbitrary test that can be given
-*   `PredicateTest<T>` (where `T` extends `Element`)
-    — models a test for `T`
-*   `AssertAnything`
-    — models a check function as returned by `convertElement`
-*   `AssertPredicate<T>` (where `T` extends `Element`)
-    — models a check function for `T` as returned by `convertElement`
+It exports the additional types [`AssertAnything`][assertanything],
+[`AssertPredicate`][assertpredicate], [`Test`][test],
+[`TestFunctionAnything`][testfunctionanything],
+[`TestFunctionPredicate`][testfunctionpredicate], and
+[`PredicateTest`][predicatetest].
 
 ## Compatibility
 
 Projects maintained by the unified collective are compatible with all maintained
 versions of Node.js.
-As of now, that is Node.js 12.20+, 14.14+, 16.0+, and 18.0+.
+As of now, that is Node.js 14.14+ and 16.0+.
 Our projects sometimes work with older versions, but this is not guaranteed.
 
 ## Security
@@ -258,14 +367,24 @@ abide by its terms.
 
 [element]: https://github.com/syntax-tree/hast#element
 
-[parent]: https://github.com/syntax-tree/unist#parent-1
-
-[index]: https://github.com/syntax-tree/unist#index
-
-[test]: #function-testelement-index-parent
-
 [xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
 
 [unist-util-is]: https://github.com/syntax-tree/unist-util-is
 
 [hast-util-select]: https://github.com/syntax-tree/hast-util-select
+
+[iselement]: #iselementnode-test-index-parent-context
+
+[convertelement]: #convertelementtest
+
+[assertanything]: #assertanything
+
+[assertpredicate]: #assertpredicate
+
+[test]: #test
+
+[testfunctionanything]: #testfunctionanything
+
+[predicatetest]: #predicatetest
+
+[testfunctionpredicate]: #testfunctionpredicate

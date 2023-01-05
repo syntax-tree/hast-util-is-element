@@ -4,20 +4,17 @@
  */
 
 /**
- * @typedef {string} TagName
- *   Check for a certain tag name.
- *
- * @typedef {null | undefined | TagName | TestFunctionAnything | Array<TagName | TestFunctionAnything>} Test
- *   Check for an arbitrary element, unaware of TypeScript.
+ * @typedef {null | undefined | string | TestFunctionAnything | Array<string | TestFunctionAnything>} Test
+ *   Check for an arbitrary element, unaware of TypeScript inferral.
  *
  * @callback TestFunctionAnything
- *   Check if an element passes a test, unaware of TypeScript.
+ *   Check if an element passes a test, unaware of TypeScript inferral.
  * @param {Element} element
  *   An element.
  * @param {number | null | undefined} [index]
- *   Optionally, its position in its parent.
+ *   The element’s position in its parent.
  * @param {Parent | null | undefined} [parent]
- *   Optionally, its parent.
+ *   The element’s parent.
  * @returns {boolean | void}
  *   Whether this element passes the test.
  */
@@ -26,7 +23,7 @@
  * @template {Element} T
  *   Element type.
  * @typedef {T['tagName'] | TestFunctionPredicate<T> | Array<T['tagName'] | TestFunctionPredicate<T>>} PredicateTest
- *   Basic check for an element that can be inferred by TypeScript.
+ *   Check for an element that can be inferred by TypeScript.
  */
 
 /**
@@ -39,24 +36,22 @@
  * @param {Element} element
  *   An element.
  * @param {number | null | undefined} [index]
- *   Optionally, its position in its parent.
+ *   The element’s position in its parent.
  * @param {Parent | null | undefined} [parent]
- *   Optionally, its parent.
+ *   The element’s parent.
  * @returns {element is T}
  *   Whether this element passes the test.
  */
 
 /**
- * Check if a node is an element and passes a certain node test
- *
  * @callback AssertAnything
- *   Check that an arbitrary value is an element, unaware of TypeScript.
+ *   Check that an arbitrary value is an element, unaware of TypeScript inferral.
  * @param {unknown} [node]
  *   Anything (typically a node).
  * @param {number | null | undefined} [index]
- *   Optionally, its position in its parent.
+ *   The node’s position in its parent.
  * @param {Parent | null | undefined} [parent]
- *   Optionally, its parent.
+ *   The node’s parent.
  * @returns {boolean}
  *   Whether this is an element and passes a test.
  */
@@ -71,9 +66,9 @@
  * @param {unknown} [node]
  *   Anything (typically a node).
  * @param {number | null | undefined} [index]
- *   Optionally, its position in its parent.
+ *   The node’s position in its parent.
  * @param {Parent | null | undefined} [parent]
- *   Optionally, its parent.
+ *   The node’s parent.
  * @returns {node is T}
  *   Whether this is an element and passes a test.
  */
@@ -82,13 +77,13 @@
  * Check if `node` is an `Element` and whether it passes the given test.
  *
  * @param node
- *   Anything (typically a node).
+ *   Thing to check, typically `Node`.
  * @param test
- *   A check.
+ *   A check for a specific element.
  * @param index
- *   Optionally, its position in its parent.
+ *   The node’s position in its parent.
  * @param parent
- *   Optionally, its parent.
+ *   The node’s parent.
  * @returns
  *   Whether `node` is an element and passes a test.
  */
@@ -148,16 +143,21 @@ export const isElement =
   )
 
 /**
- * Generate an assertion from a check.
+ * Generate an assertion from a test.
+ *
+ * Useful if you’re going to test many nodes, for example when creating a
+ * utility where something else passes a compatible test.
+ *
+ * The created function is a bit faster because it expects valid input only:
+ * a `node`, `index`, and `parent`.
  *
  * @param test
- *   *  When nullish, checks if `node` is a `Node`.
- *   *  When `string`, works like passing `function (node) {return node.type === test}`.
- *   *  When `function` checks if function passed the node is true.
- *   *  When `object`, checks that all keys in test are in node, and that they have (strictly) equal values.
+ *   *  When nullish, checks if `node` is an `Element`.
+ *   *  When `string`, works like passing `(element) => element.tagName === test`.
+ *   *  When `function` checks if function passed the element is true.
  *   *  When `array`, checks any one of the subtests pass.
  * @returns
- *   A test.
+ *   An assertion.
  */
 export const convertElement =
   /**
@@ -195,7 +195,7 @@ export const convertElement =
 /**
  * Handle multiple tests.
  *
- * @param {Array<TagName | TestFunctionAnything>} tests
+ * @param {Array<string | TestFunctionAnything>} tests
  * @returns {AssertAnything}
  */
 function anyFactory(tests) {
@@ -230,7 +230,7 @@ function anyFactory(tests) {
 /**
  * Turn a string into a test for an element with a certain tag name.
  *
- * @param {TagName} check
+ * @param {string} check
  * @returns {AssertAnything}
  */
 function tagNameFactory(check) {
