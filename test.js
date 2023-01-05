@@ -3,14 +3,15 @@
  * @typedef {import('hast').Element} Element
  */
 
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {isElement} from './index.js'
 
-test('isElement', (t) => {
-  t.equal(isElement(), false, 'should return `false` without node')
-  t.equal(isElement(null), false, 'should return `false` with `null`')
+test('isElement', async (t) => {
+  assert.equal(isElement(), false, 'should return `false` without node')
+  assert.equal(isElement(null), false, 'should return `false` with `null`')
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error runtime.
       isElement(null, true)
@@ -19,92 +20,86 @@ test('isElement', (t) => {
     'should throw when the second parameter is invalid'
   )
 
-  t.test('isElement(node)', (st) => {
-    st.equal(
+  await t.test('isElement(node)', () => {
+    assert.equal(
       isElement({type: 'text'}),
       false,
       'should return `false` when without `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element'}),
       false,
       'should return `false` when with invalid `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element', tagName: 'div'}),
       true,
       'should return `true` when with valid `element`'
     )
-
-    st.end()
   })
 
-  t.test('isElement(node, tagName)', (st) => {
-    st.equal(
+  await t.test('isElement(node, tagName)', () => {
+    assert.equal(
       isElement({type: 'text'}, 'div'),
       false,
       'should return `false` when without `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element'}, 'div'),
       false,
       'should return `false` when with invalid `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element', tagName: 'strong'}, 'div'),
       false,
       'should return `false` when without matching `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element', tagName: 'div'}, 'div'),
       true,
       'should return `true` when with matching `element`'
     )
-
-    st.end()
   })
 
-  t.test('isElement(node, tagNames)', (st) => {
-    st.equal(
+  await t.test('isElement(node, tagNames)', () => {
+    assert.equal(
       isElement({type: 'text'}, ['div']),
       false,
       'should return `false` when without `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element'}, ['div']),
       false,
       'should return `false` when with invalid `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element', tagName: 'strong'}, ['div']),
       false,
       'should return `false` when without matching `element`'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element', tagName: 'div'}, ['div', 'strong', 'em']),
       true,
       'should return `true` when with matching `element` (#1)'
     )
 
-    st.equal(
+    assert.equal(
       isElement({type: 'element', tagName: 'em'}, ['div', 'strong', 'em']),
       true,
       'should return `true` when with matching `element` (#2)'
     )
-
-    st.end()
   })
 
-  t.test('isElement(node, test)', (st) => {
-    st.equal(
+  await t.test('isElement(node, test)', () => {
+    assert.equal(
       isElement({type: 'text'}, () => {
         throw new Error('!')
       }),
@@ -112,7 +107,7 @@ test('isElement', (t) => {
       'should not call `test` if the given node is not an element'
     )
 
-    st.equal(
+    assert.equal(
       isElement(
         {type: 'element', tagName: 'a', children: []},
         (node) => node.children.length === 0
@@ -121,7 +116,7 @@ test('isElement', (t) => {
       'should call `test` if the given node is a valid element (1)'
     )
 
-    st.equal(
+    assert.equal(
       isElement(
         {type: 'element', tagName: 'a', children: [{type: 'text'}]},
         (node) => node.children.length === 0
@@ -136,7 +131,7 @@ test('isElement', (t) => {
       children: [{type: 'element', tagName: 'a', children: []}]
     }
 
-    st.equal(
+    assert.equal(
       isElement(
         root.children[0],
         /**
@@ -146,10 +141,10 @@ test('isElement', (t) => {
          * @param {Parent|undefined|null} parent
          */
         function (node, index, parent) {
-          st.equal(node, root.children[0], 'should pass `node` to test')
-          st.equal(index, 0, 'should pass `index` to test')
-          st.equal(parent, root, 'should pass `parent` to test')
-          st.equal(this, ctx, 'should pass `context` to test')
+          assert.equal(node, root.children[0], 'should pass `node` to test')
+          assert.equal(index, 0, 'should pass `index` to test')
+          assert.equal(parent, root, 'should pass `parent` to test')
+          assert.equal(this, ctx, 'should pass `context` to test')
         },
         0,
         root,
@@ -159,7 +154,7 @@ test('isElement', (t) => {
       'should call `test` if the given node is a valid element (2)'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         isElement(root.children[0], () => {}, 0)
       },
@@ -167,7 +162,7 @@ test('isElement', (t) => {
       'should throw if `index` is passed but not `parent`'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         isElement(root.children[0], () => {}, undefined, root)
       },
@@ -175,7 +170,7 @@ test('isElement', (t) => {
       'should throw if `parent` is passed but not `index`'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         // @ts-expect-error runtime.
         isElement(root.children[0], () => {}, false)
@@ -184,7 +179,7 @@ test('isElement', (t) => {
       'should throw if `index` is not a number'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         isElement(root.children[0], () => {}, -1)
       },
@@ -192,7 +187,7 @@ test('isElement', (t) => {
       'should throw if `index` is negative'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         isElement(root.children[0], () => {}, Number.POSITIVE_INFINITY)
       },
@@ -200,7 +195,7 @@ test('isElement', (t) => {
       'should throw if `index` is infinity'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         // @ts-expect-error runtime.
         isElement(root.children[0], () => {}, 0, true)
@@ -209,7 +204,7 @@ test('isElement', (t) => {
       'should throw if `parent` is not a node'
     )
 
-    st.throws(
+    assert.throws(
       () => {
         // @ts-expect-error runtime.
         isElement(root.children[0], () => {}, 0, {type: 'root'})
@@ -217,9 +212,5 @@ test('isElement', (t) => {
       /Expected parent node/,
       'should throw if `parent` is not a parent'
     )
-
-    st.end()
   })
-
-  t.end()
 })
