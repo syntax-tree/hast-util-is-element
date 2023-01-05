@@ -1,63 +1,99 @@
 /**
- * @typedef {import('unist').Node} Node
  * @typedef {import('unist').Parent} Parent
  * @typedef {import('hast').Element} Element
- *
+ */
+
+/**
  * @typedef {string} TagName
+ *   Check for a certain tag name.
  *
- * @typedef {null|undefined|TagName|TestFunctionAnything|Array<TagName|TestFunctionAnything>} Test
+ * @typedef {null | undefined | TagName | TestFunctionAnything | Array<TagName | TestFunctionAnything>} Test
+ *   Check for an arbitrary element, unaware of TypeScript.
  *
  * @callback TestFunctionAnything
- *   Check if an element passes a test.
+ *   Check if an element passes a test, unaware of TypeScript.
  * @param {Element} element
- * @param {number|null|undefined} [index]
- * @param {Parent|null|undefined} [parent]
- * @returns {boolean|void}
+ *   An element.
+ * @param {number | null | undefined} [index]
+ *   Optionally, its position in its parent.
+ * @param {Parent | null | undefined} [parent]
+ *   Optionally, its parent.
+ * @returns {boolean | void}
+ *   Whether this element passes the test.
  */
 
 /**
  * @template {Element} T
- * @typedef {null|undefined|T['tagName']|TestFunctionPredicate<T>|Array<T['tagName']|TestFunctionPredicate<T>>} PredicateTest
+ *   Element type.
+ * @typedef {T['tagName'] | TestFunctionPredicate<T> | Array<T['tagName'] | TestFunctionPredicate<T>>} PredicateTest
+ *   Basic check for an element that can be inferred by TypeScript.
  */
 
 /**
  * Check if an element passes a certain node test.
  *
- * @template {Element} X
+ * @template {Element} T
+ *   Element type.
  * @callback TestFunctionPredicate
+ *   Complex test function for an element that can be inferred by TypeScript.
  * @param {Element} element
- * @param {number|null|undefined} [index]
- * @param {Parent|null|undefined} [parent]
- * @returns {element is X}
+ *   An element.
+ * @param {number | null | undefined} [index]
+ *   Optionally, its position in its parent.
+ * @param {Parent | null | undefined} [parent]
+ *   Optionally, its parent.
+ * @returns {element is T}
+ *   Whether this element passes the test.
  */
 
 /**
  * Check if a node is an element and passes a certain node test
  *
  * @callback AssertAnything
+ *   Check that an arbitrary value is an element, unaware of TypeScript.
  * @param {unknown} [node]
- * @param {number|null|undefined} [index]
- * @param {Parent|null|undefined} [parent]
+ *   Anything (typically a node).
+ * @param {number | null | undefined} [index]
+ *   Optionally, its position in its parent.
+ * @param {Parent | null | undefined} [parent]
+ *   Optionally, its parent.
  * @returns {boolean}
+ *   Whether this is an element and passes a test.
  */
 
 /**
  * Check if a node is an element and passes a certain node test
  *
- * @template {Element} Y
+ * @template {Element} T
+ *   Element type.
  * @callback AssertPredicate
+ *   Check that an arbitrary value is a specific element, aware of TypeScript.
  * @param {unknown} [node]
- * @param {number|null|undefined} [index]
- * @param {Parent|null|undefined} [parent]
- * @returns {node is Y}
+ *   Anything (typically a node).
+ * @param {number | null | undefined} [index]
+ *   Optionally, its position in its parent.
+ * @param {Parent | null | undefined} [parent]
+ *   Optionally, its parent.
+ * @returns {node is T}
+ *   Whether this is an element and passes a test.
  */
 
-// Check if `node` is an `element` and whether it passes the given test.
+/**
+ * Check if `node` is an `Element` and whether it passes the given test.
+ *
+ * @param node
+ *   Anything (typically a node).
+ * @param test
+ *   A check.
+ * @param index
+ *   Optionally, its position in its parent.
+ * @param parent
+ *   Optionally, its parent.
+ * @returns
+ *   Whether `node` is an element and passes a test.
+ */
 export const isElement =
   /**
-   * Check if a node is an element and passes a test.
-   * When a `parent` node is known the `index` of node should also be given.
-   *
    * @type {(
    *   (() => false) &
    *   (<T extends Element = Element>(node: unknown, test?: PredicateTest<T>, index?: number, parent?: Parent, context?: unknown) => node is T) &
@@ -66,18 +102,12 @@ export const isElement =
    */
   (
     /**
-     * Check if a node passes a test.
-     * When a `parent` node is known the `index` of node should also be given.
-     *
-     * @param {unknown} [node] Node to check
-     * @param {Test} [test] When nullish, checks if `node` is a `Node`.
-     * When `string`, works like passing `function (node) {return node.type === test}`.
-     * When `function` checks if function passed the node is true.
-     * When `array`, checks any one of the subtests pass.
-     * @param {number} [index] Position of `node` in `parent`
-     * @param {Parent} [parent] Parent of `node`
-     * @param {unknown} [context] Context object to invoke `test` with
-     * @returns {boolean} Whether test passed and `node` is an `Element` (object with `type` set to `element` and `tagName` set to a non-empty string).
+     * @param {unknown} [node]
+     * @param {Test | undefined} [test]
+     * @param {number | null | undefined} [index]
+     * @param {Parent | null | undefined} [parent]
+     * @param {unknown} [context]
+     * @returns {boolean}
      */
     // eslint-disable-next-line max-params
     function (node, test, index, parent, context) {
@@ -117,22 +147,28 @@ export const isElement =
     }
   )
 
+/**
+ * Generate an assertion from a check.
+ *
+ * @param test
+ *   *  When nullish, checks if `node` is a `Node`.
+ *   *  When `string`, works like passing `function (node) {return node.type === test}`.
+ *   *  When `function` checks if function passed the node is true.
+ *   *  When `object`, checks that all keys in test are in node, and that they have (strictly) equal values.
+ *   *  When `array`, checks any one of the subtests pass.
+ * @returns
+ *   A test.
+ */
 export const convertElement =
   /**
    * @type {(
-   *   (<T extends Element>(test: T['tagName']|TestFunctionPredicate<T>) => AssertPredicate<T>) &
+   *   (<T extends Element>(test: T['tagName'] | TestFunctionPredicate<T>) => AssertPredicate<T>) &
    *   ((test?: Test) => AssertAnything)
    * )}
    */
   (
     /**
-     * Generate an assertion from a check.
-     * @param {Test} [test]
-     * When nullish, checks if `node` is a `Node`.
-     * When `string`, works like passing `function (node) {return node.type === test}`.
-     * When `function` checks if function passed the node is true.
-     * When `object`, checks that all keys in test are in node, and that they have (strictly) equal values.
-     * When `array`, checks any one of the subtests pass.
+     * @param {Test | null | undefined} [test]
      * @returns {AssertAnything}
      */
     function (test) {
@@ -157,7 +193,9 @@ export const convertElement =
   )
 
 /**
- * @param {Array<TagName|TestFunctionAnything>} tests
+ * Handle multiple tests.
+ *
+ * @param {Array<TagName | TestFunctionAnything>} tests
  * @returns {AssertAnything}
  */
 function anyFactory(tests) {
@@ -190,8 +228,7 @@ function anyFactory(tests) {
 }
 
 /**
- * Utility to convert a string into a function which checks a given node’s tag
- * name for said string.
+ * Turn a string into a test for an element with a certain tag name.
  *
  * @param {TagName} check
  * @returns {AssertAnything}
@@ -209,6 +246,8 @@ function tagNameFactory(check) {
 }
 
 /**
+ * Turn a custom test into a test for an element that passes that test.
+ *
  * @param {TestFunctionAnything} check
  * @returns {AssertAnything}
  */
@@ -228,7 +267,8 @@ function castFactory(check) {
 }
 
 /**
- * Utility to return true if this is an element.
+ * Make sure something is an element.
+ *
  * @param {unknown} node
  * @returns {node is Element}
  */
