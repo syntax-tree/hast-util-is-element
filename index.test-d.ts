@@ -1,17 +1,17 @@
 import {unified} from 'unified'
-import {Node} from 'unist'
+import type {Node} from 'unist'
 import {expectType, expectNotType, expectError} from 'tsd'
-import {Element} from 'hast'
+import type {Element} from 'hast'
 import {isElement, convertElement} from './index.js'
 
 /* Setup. */
-interface Section extends Element {
+type Section = {
   tagName: 'section'
-}
+} & Element
 
-interface Article extends Element {
+type Article = {
   tagName: 'article'
-}
+} & Element
 
 const section: Element = {
   type: 'element',
