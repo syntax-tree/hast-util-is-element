@@ -9,10 +9,11 @@ import {isElement} from './index.js'
 import * as mod from './index.js'
 
 test('isElement', async (t) => {
-  const api = Object.keys(mod)
-  assert.ok(api.includes('isElement'), 'should expose `isElement`')
-  assert.ok(api.includes('convertElement'), 'should expose `convertElement`')
-  assert.equal(api.length, 2, 'should expose the public api')
+  assert.deepEqual(
+    Object.keys(mod).sort(),
+    ['convertElement', 'isElement'],
+    'should expose the public api'
+  )
 
   assert.equal(isElement(), false, 'should return `false` without node')
   assert.equal(isElement(null), false, 'should return `false` with `null`')
