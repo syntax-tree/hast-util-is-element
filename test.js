@@ -1,6 +1,5 @@
 /**
- * @typedef {import('hast').Element} Element
- * @typedef {import('unist').Parent} Parent
+ * @typedef {import('hast').Root} Root
  */
 
 import assert from 'node:assert/strict'
@@ -29,7 +28,7 @@ test('isElement', async function (t) {
       assert.throws(function () {
         // @ts-expect-error: check that the runtime handles an incorrect `test`.
         isElement(null, true)
-      }, /Expected function, string, or array as test/)
+      }, /Expected function, string, or array as `test`/)
     }
   )
 })
@@ -138,9 +137,10 @@ test('isElement(node, tagNames)', async function (t) {
 
 test('isElement(node, test)', async function (t) {
   const ctx = {}
+  /** @type {Root} */
   const root = {
     type: 'root',
-    children: [{type: 'element', tagName: 'a', children: []}]
+    children: [{type: 'element', tagName: 'a', properties: {}, children: []}]
   }
 
   await t.test(
@@ -191,12 +191,6 @@ test('isElement(node, test)', async function (t) {
       assert.equal(
         isElement(
           root.children[0],
-          /**
-           * @this {ctx}
-           * @param {Element} node
-           * @param {number | undefined | null} index
-           * @param {Parent | undefined | null} parent
-           */
           function (node, index, parent) {
             assert.equal(node, root.children[0])
             assert.equal(index, 0)
@@ -217,7 +211,7 @@ test('isElement(node, test)', async function (t) {
     async function () {
       assert.throws(function () {
         isElement(root.children[0], function () {}, 0)
-      }, /Expected both parent and index/)
+      }, /Expected both `index` and `parent`/)
     }
   )
 
@@ -226,7 +220,7 @@ test('isElement(node, test)', async function (t) {
     async function () {
       assert.throws(function () {
         isElement(root.children[0], function () {}, undefined, root)
-      }, /Expected both parent and index/)
+      }, /Expected both `index` and `parent`/)
     }
   )
 
@@ -234,32 +228,32 @@ test('isElement(node, test)', async function (t) {
     assert.throws(function () {
       // @ts-expect-error: check that the runtime handles an incorrect `index`.
       isElement(root.children[0], function () {}, false)
-    }, /Expected positive finite index for child node/)
+    }, /Expected positive finite `index`/)
   })
 
   await t.test('should throw if `index` is negative', async function () {
     assert.throws(function () {
       isElement(root.children[0], function () {}, -1)
-    }, /Expected positive finite index for child node/)
+    }, /Expected positive finite `index`/)
   })
 
   await t.test('should throw if `index` is infinity', async function () {
     assert.throws(function () {
       isElement(root.children[0], function () {}, Number.POSITIVE_INFINITY)
-    }, /Expected positive finite index for child node/)
+    }, /Expected positive finite `index`/)
   })
 
   await t.test('should throw if `parent` is not a node', async function () {
     assert.throws(function () {
       // @ts-expect-error: check that the runtime handles an incorrect `parent`.
       isElement(root.children[0], function () {}, 0, true)
-    }, /Expected parent node/)
+    }, /Expected valid `parent`/)
   })
 
   await t.test('should throw if `parent` is not a parent', async function () {
     assert.throws(function () {
       // @ts-expect-error: check that the runtime handles a non-parent.
       isElement(root.children[0], function () {}, 0, {type: 'text'})
-    }, /Expected parent node/)
+    }, /Expected valid `parent`/)
   })
 })

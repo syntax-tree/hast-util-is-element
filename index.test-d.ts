@@ -1,173 +1,198 @@
-import type {Element} from 'hast'
-import {expectAssignable, expectError, expectNotType, expectType} from 'tsd'
-import {unified} from 'unified'
-import type {Node} from 'unist'
-import {isElement, convertElement} from './index.js'
+import type {Element, Parents, Root, RootContent} from 'hast'
+import {expectAssignable, expectNotType, expectType} from 'tsd'
+import {convertElement, isElement} from './index.js'
 
-/* Setup. */
-type Section = {
-  tagName: 'section'
-} & Element
+// # Setup
 
-type Article = {
-  tagName: 'article'
-} & Element
+const hastElement = (function (): Root | RootContent {
+  return {type: 'element', tagName: 'a', properties: {}, children: []}
+})()
 
-const section: Element = {
-  type: 'element',
-  tagName: 'section',
-  properties: {},
-  children: [{type: 'text', value: 'x'}]
-}
+const unknownValue = (function (): unknown {
+  return {type: 'something'}
+})()
 
-const article: Element = {
-  type: 'element',
-  tagName: 'article',
-  properties: {},
-  children: [{type: 'text', value: 'x'}]
-}
+const someTagName = (function (): string {
+  return 'c'
+})()
 
-const isSection = (element: Element): element is Section =>
-  element.tagName === 'section'
+// # `isElement`
 
+// No node.
 expectType<false>(isElement())
 
-/* Missing parameters. */
-expectError(isElement<Section>())
+// No test.
+expectType<boolean>(isElement(hastElement))
 
-/* Types cannot be narrowed without predicate. */
-expectType<boolean>(isElement(section))
-
-/* Incorrect generic. */
-expectError(isElement<string>(section, 'section'))
-expectError(isElement<boolean>(section, 'section'))
-expectError(isElement<Record<string, unknown>>(section, 'section'))
-
-/* Should be assignable to boolean. */
-expectType<boolean>(isElement<Section>(section, 'section'))
-
-/* Test isElement optional */
-expectType<boolean>(isElement(section))
-expectType<boolean>(isElement(section, null))
-expectType<boolean>(isElement(section, undefined))
-/* But not with a type predicate */
-expectError(isElement<Node>(section)) // But not with a type predicate
-expectError(isElement<Node>(section, null))
-expectError(isElement<Node>(section, undefined))
-
-/* Should support string tests. */
-expectType<boolean>(isElement<Section>(section, 'section'))
-expectType<boolean>(isElement<Section>(article, 'section'))
-expectError(isElement<Section>(section, 'article'))
-
-if (isElement<Section>(section, 'section')) {
-  expectType<Section>(section)
-  expectNotType<Article>(section)
+if (isElement(unknownValue)) {
+  expectType<Element>(unknownValue)
 }
 
-expectType<boolean>(isElement<Article>(article, 'article'))
-expectType<boolean>(isElement<Article>(section, 'article'))
-expectError(isElement<Article>(article, 'section'))
+/* Nullish test. */
+expectType<boolean>(isElement(hastElement, null))
+expectType<boolean>(isElement(hastElement, undefined))
 
-if (isElement<Article>(article, 'article')) {
-  expectType<Article>(article)
-  expectNotType<Section>(article)
+// String test.
+if (isElement(hastElement, 'a')) {
+  expectType<Element & {tagName: 'a'}>(hastElement)
 }
 
-/* Should support function tests. */
-expectType<boolean>(isElement(section, isSection))
-expectType<boolean>(isElement(article, isSection))
-
-if (isElement(section, isSection)) {
-  expectType<Section>(section)
-  expectNotType<Article>(section)
+if (isElement(hastElement, 'b')) {
+  expectType<Element & {tagName: 'b'}>(hastElement)
 }
 
-expectType<boolean>(isElement(article, isSection))
-expectType<boolean>(isElement(section, isSection))
-expectError(isElement<Article>(article, isSection))
-
-if (isElement(section, isSection)) {
-  expectType<Section>(section)
+if (isElement(hastElement, someTagName)) {
+  expectType<Element>(hastElement)
 }
 
-/* Should support array tests. */
-expectType<boolean>(
-  isElement<Article | Section>(section, ['article', isSection])
-)
+// Function test (with explicit assertion).
+expectType<boolean>(isElement(hastElement, isHeading2))
 
-if (isElement<Article | Section>(section, ['article', isSection])) {
-  switch (section.tagName) {
-    case 'section': {
-      expectType<Section>(section)
-      break
-    }
-
-    case 'article': {
-      expectType<Article>(section)
-      break
-    }
-
-    default: {
-      break
-    }
-  }
+if (isElement(hastElement, isHeading2)) {
+  expectType<Element & {tagName: 'h2'}>(hastElement)
 }
 
-/* Should support being used in a unified transform. */
-unified().use(() => (tree) => {
-  if (isElement<Section>(tree, 'section')) {
-    expectAssignable<Section>(tree)
-    // Do something
-  }
-
-  return tree
-})
-
-/* Should support `convert`. */
-convertElement<Section>('section')
-expectError(convertElement<Section>('article'))
-convertElement<Section>(isSection)
-expectError(convertElement<Article>(isSection))
-convertElement()
-convertElement(null)
-convertElement(undefined)
-expectError(convertElement<Article>())
-
-declare const node: unknown
-
-/* Type assertion */
-if (isElement(node)) {
-  expectType<Element>(node)
+if (isElement(hastElement, isParagraph)) {
+  expectType<Element & {tagName: 'p'}>(hastElement)
 }
 
-if (isElement(node, (node): node is Section => node.tagName === 'section')) {
-  expectType<Section>(node)
+if (isElement(hastElement, isParagraph)) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
 }
 
-/**
- * This test demonstrates that, while the test definitely asserts that `node`
- * is an element, it asserts that it is *some* kind of element.
- * If we’d define `node` as an `Element` in the if-branch (which is correct),
- * TypeScript will think `node` is *not* an `Element` in the else-branch (which
- * is incorrect).
- * We can’t solve this in this project, but users can change their code (see
- * next example).
- */
-if (isElement(node, (node) => node.children.length > 0)) {
-  expectType<unknown>(node)
-} else {
-  expectType<unknown>(node)
+if (isElement(hastElement, isHeading2)) {
+  expectAssignable<Element>(hastElement)
+  expectType<'h2'>(hastElement.tagName)
 }
 
-/**
- * This is the suggested use of this package so TypeScript can infer what types
- * it’s working with.
- * This way, `node` as an `Element` in the if-branch, and it could still be an
- * element (or something else) in the else-branch.
- */
-if (isElement(node) && node.children.length > 0) {
-  expectType<Element>(node)
-} else {
-  expectType<unknown>(node)
+// Function test (implicit assertion).
+expectType<boolean>(isElement(hastElement, isHeading2Loose))
+
+if (isElement(hastElement, isHeading2Loose)) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+if (isElement(hastElement, isParagraphLoose)) {
+  expectNotType<Element & {tagName: 'p'}>(hastElement)
+}
+
+if (isElement(hastElement, isHead)) {
+  expectType<Element>(hastElement)
+}
+
+// Array tests.
+// Can’t narrow down.
+expectType<boolean>(isElement(hastElement, ['h2', isHeading2, isHeading2Loose]))
+
+// Can’t narrow down.
+if (isElement(hastElement, ['h2', isHeading2, isHeading2Loose])) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+// # `convertElement`
+
+// No node.
+const checkNone = convertElement()
+expectType<boolean>(checkNone())
+
+// No test.
+expectType<boolean>(checkNone(hastElement))
+
+if (checkNone(unknownValue)) {
+  expectType<Element>(unknownValue)
+}
+
+/* Nullish test. */
+const checkNull = convertElement(null)
+const checkUndefined = convertElement(null)
+expectType<boolean>(checkNull(hastElement))
+expectType<boolean>(checkUndefined(hastElement))
+
+// String test.
+const checkHeading2 = convertElement('h2')
+const checkParagraph = convertElement('p')
+
+if (checkHeading2(hastElement)) {
+  expectType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+if (checkParagraph(hastElement)) {
+  expectType<Element & {tagName: 'p'}>(hastElement)
+}
+
+// Function test (with explicit assertion).
+const checkParagraphFn = convertElement(isParagraph)
+const checkHeading2Fn = convertElement(isHeading2)
+
+expectType<boolean>(checkHeading2Fn(hastElement))
+
+if (checkHeading2Fn(hastElement)) {
+  expectType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+if (checkParagraphFn(hastElement)) {
+  expectType<Element & {tagName: 'p'}>(hastElement)
+}
+
+if (checkParagraphFn(hastElement)) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+if (checkHeading2Fn(hastElement)) {
+  expectAssignable<Element>(hastElement)
+  expectType<'h2'>(hastElement.tagName)
+}
+
+// Function test (implicit assertion).
+const checkHeading2LooseFn = convertElement(isHeading2Loose)
+const checkParagraphLooseFn = convertElement(isParagraphLoose)
+const checkHeadFn = convertElement(isHead)
+
+expectType<boolean>(checkHeading2LooseFn(hastElement))
+
+if (checkHeading2LooseFn(hastElement)) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+if (checkParagraphLooseFn(hastElement)) {
+  expectNotType<Element & {tagName: 'p'}>(hastElement)
+}
+
+if (checkHeadFn(hastElement)) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+// Array tests.
+// Can’t narrow down.
+const isHeadingArray = convertElement(['h2', isHeading2, isHeading2Loose])
+
+expectType<boolean>(isHeadingArray(hastElement))
+
+// Can’t narrow down.
+if (isHeadingArray(hastElement)) {
+  expectNotType<Element & {tagName: 'h2'}>(hastElement)
+}
+
+function isHeading2(element: Element): element is Element & {tagName: 'h2'} {
+  return element.tagName === 'h2'
+}
+
+function isHeading2Loose(element: Element) {
+  return element.tagName === 'h2'
+}
+
+function isParagraph(element: Element): element is Element & {tagName: 'p'} {
+  return element.tagName === 'p'
+}
+
+function isParagraphLoose(element: Element) {
+  return element.tagName === 'p'
+}
+
+function isHead(
+  element: Element,
+  index: number | undefined,
+  parent: Parents | undefined
+) {
+  return parent ? index === 0 : false
 }
