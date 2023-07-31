@@ -181,7 +181,7 @@ type).
 ###### Type
 
 ```ts
-type Test = null | undefined | string | TestFunctionAnything | Array<string | TestFunctionAnything>
+type Test = Array<TestFunctionAnything | string> | TestFunctionAnything | string | null | undefined
 ```
 
 Checks that the given thing is an element, and then:

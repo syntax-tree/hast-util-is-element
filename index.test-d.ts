@@ -1,7 +1,7 @@
+import type {Element} from 'hast'
+import {expectError, expectNotType, expectType} from 'tsd'
 import {unified} from 'unified'
 import type {Node} from 'unist'
-import {expectType, expectNotType, expectError} from 'tsd'
-import type {Element} from 'hast'
 import {isElement, convertElement} from './index.js'
 
 /* Setup. */

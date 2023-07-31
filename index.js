@@ -1,10 +1,10 @@
 /**
- * @typedef {import('unist').Parent} Parent
  * @typedef {import('hast').Element} Element
+ * @typedef {import('unist').Parent} Parent
  */
 
 /**
- * @typedef {null | undefined | string | TestFunctionAnything | Array<string | TestFunctionAnything>} Test
+ * @typedef {Array<TestFunctionAnything | string> | TestFunctionAnything | string | null | undefined} Test
  *   Check for an arbitrary element, unaware of TypeScript inferral.
  *
  * @callback TestFunctionAnything
@@ -12,17 +12,17 @@
  * @param {Element} element
  *   An element.
  * @param {number | null | undefined} [index]
- *   The element’s position in its parent.
+ *   Position of `node` in `parent`.
  * @param {Parent | null | undefined} [parent]
- *   The element’s parent.
- * @returns {boolean | void}
+ *   Parent of `node`.
+ * @returns {boolean | undefined | void}
  *   Whether this element passes the test.
  */
 
 /**
  * @template {Element} T
  *   Element type.
- * @typedef {T['tagName'] | TestFunctionPredicate<T> | Array<T['tagName'] | TestFunctionPredicate<T>>} PredicateTest
+ * @typedef {Array<TestFunctionPredicate<T> | T['tagName']> | TestFunctionPredicate<T> | T['tagName']} PredicateTest
  *   Check for an element that can be inferred by TypeScript.
  */
 
@@ -36,9 +36,9 @@
  * @param {Element} element
  *   An element.
  * @param {number | null | undefined} [index]
- *   The element’s position in its parent.
+ *   Position of `node` in `parent`.
  * @param {Parent | null | undefined} [parent]
- *   The element’s parent.
+ *   Parent of `node`.
  * @returns {element is T}
  *   Whether this element passes the test.
  */
@@ -49,9 +49,9 @@
  * @param {unknown} [node]
  *   Anything (typically a node).
  * @param {number | null | undefined} [index]
- *   The node’s position in its parent.
+ *   Position of `node` in `parent`.
  * @param {Parent | null | undefined} [parent]
- *   The node’s parent.
+ *   Parent of `node`.
  * @returns {boolean}
  *   Whether this is an element and passes a test.
  */
@@ -66,9 +66,9 @@
  * @param {unknown} [node]
  *   Anything (typically a node).
  * @param {number | null | undefined} [index]
- *   The node’s position in its parent.
+ *   Position of `node` in `parent`.
  * @param {Parent | null | undefined} [parent]
- *   The node’s parent.
+ *   Parent of `node`.
  * @returns {node is T}
  *   Whether this is an element and passes a test.
  */
@@ -79,15 +79,18 @@
  * @param node
  *   Thing to check, typically `Node`.
  * @param test
- *   A check for a specific element.
+ *   Check for a specific element.
  * @param index
- *   The node’s position in its parent.
+ *   Position of `node` in `parent`.
  * @param parent
- *   The node’s parent.
+ *   Parent of `node`.
+ * @param context
+ *   Context to call `test` with.
  * @returns
  *   Whether `node` is an element and passes a test.
  */
 export const isElement =
+  // Note: JSDoc overloads don’t support optional type parameters.
   /**
    * @type {(
    *   (() => false) &
@@ -109,8 +112,8 @@ export const isElement =
       const check = convertElement(test)
 
       if (
-        index !== undefined &&
         index !== null &&
+        index !== undefined &&
         (typeof index !== 'number' ||
           index < 0 ||
           index === Number.POSITIVE_INFINITY)
@@ -119,21 +122,21 @@ export const isElement =
       }
 
       if (
-        parent !== undefined &&
         parent !== null &&
+        parent !== undefined &&
         (!parent.type || !parent.children)
       ) {
         throw new Error('Expected parent node')
       }
 
-      // @ts-expect-error Looks like a node.
+      // @ts-expect-error: looks like a node.
       if (!node || !node.type || typeof node.type !== 'string') {
         return false
       }
 
       if (
-        (parent === undefined || parent === null) !==
-        (index === undefined || index === null)
+        (parent === null || parent === undefined) !==
+        (index === null || index === undefined)
       ) {
         throw new Error('Expected both parent and index')
       }
@@ -172,7 +175,7 @@ export const convertElement =
      * @returns {AssertAnything}
      */
     function (test) {
-      if (test === undefined || test === null) {
+      if (test === null || test === undefined) {
         return element
       }
 
@@ -195,7 +198,7 @@ export const convertElement =
 /**
  * Handle multiple tests.
  *
- * @param {Array<string | TestFunctionAnything>} tests
+ * @param {Array<TestFunctionAnything | string>} tests
  * @returns {AssertAnything}
  */
 function anyFactory(tests) {
@@ -261,7 +264,7 @@ function castFactory(check) {
    * @returns {boolean}
    */
   function assertion(node, ...parameters) {
-    // @ts-expect-error: fine.
+    // @ts-expect-error: assume valid parameters.
     return element(node) && Boolean(check.call(this, node, ...parameters))
   }
 }
@@ -276,9 +279,9 @@ function element(node) {
   return Boolean(
     node &&
       typeof node === 'object' &&
-      // @ts-expect-error Looks like a node.
+      'type' in node &&
       node.type === 'element' &&
-      // @ts-expect-error Looks like an element.
+      'tagName' in node &&
       typeof node.tagName === 'string'
   )
 }
