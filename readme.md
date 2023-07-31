@@ -55,14 +55,14 @@ npm install hast-util-is-element
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import {isElement} from 'https://esm.sh/hast-util-is-element@2'
+import {isElement} from 'https://esm.sh/hast-util-is-element@3'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import {isElement} from 'https://esm.sh/hast-util-is-element@2?bundle'
+  import {isElement} from 'https://esm.sh/hast-util-is-element@3?bundle'
 </script>
 ```
 
