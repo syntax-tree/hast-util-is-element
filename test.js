@@ -4,11 +4,11 @@
 
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import {isElement} from './index.js'
+import {isElement} from 'hast-util-is-element'
 
 test('isElement', async function (t) {
   await t.test('should expose the public api', async function () {
-    assert.deepEqual(Object.keys(await import('./index.js')).sort(), [
+    assert.deepEqual(Object.keys(await import('hast-util-is-element')).sort(), [
       'convertElement',
       'isElement'
     ])
