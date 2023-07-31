@@ -1,5 +1,5 @@
 import type {Element} from 'hast'
-import {expectError, expectNotType, expectType} from 'tsd'
+import {expectAssignable, expectError, expectNotType, expectType} from 'tsd'
 import {unified} from 'unified'
 import type {Node} from 'unist'
 import {isElement, convertElement} from './index.js'
@@ -117,7 +117,7 @@ if (isElement<Article | Section>(section, ['article', isSection])) {
 /* Should support being used in a unified transform. */
 unified().use(() => (tree) => {
   if (isElement<Section>(tree, 'section')) {
-    expectType<Section>(tree)
+    expectAssignable<Section>(tree)
     // Do something
   }
 
